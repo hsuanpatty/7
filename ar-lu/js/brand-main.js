@@ -187,6 +187,7 @@
 
   /* =========================================================
      4. 精選旅程｜無限循環輪播
+     切換時由 CSS 控制卡片平順放大／縮小
   ========================================================= */
 
   const featuredRoot = $("#featuredSlider");
@@ -337,9 +338,9 @@
     if (!activeItem) return;
 
     /*
-     * 先讀取卡片的版面位置，再更新 is-active。
-     * 避免 CSS 的文字顯示與卡片縮放狀態影響本次定位。
-     * 卡片大小完全由 CSS 控制，JS 不設定 scale。
+     * 先計算中央卡片位置，再更新 is-active。
+     * 卡片縮放、淡入淡出由 CSS 控制。
+     * 保留原本的置中計算，不直接用 JS 設定 scale。
      */
     const viewportWidth = root.clientWidth;
 
@@ -350,8 +351,9 @@
 
     updateFeaturedActive();
 
+    /* 輪播位移與卡片縮放使用相近的動畫時間 */
     track.style.transition = animate
-      ? "transform .65s cubic-bezier(.22, .75, .25, 1)"
+      ? "transform .8s cubic-bezier(.22, .61, .36, 1)"
       : "none";
 
     track.style.transform = `translate3d(${offset}px, 0, 0)`;
@@ -363,7 +365,7 @@
       track.getBoundingClientRect();
 
       track.style.transition =
-        "transform .65s cubic-bezier(.22, .75, .25, 1)";
+        "transform .8s cubic-bezier(.22, .61, .36, 1)";
     }
   }
 
@@ -504,178 +506,272 @@
     }
   }
 
+
   /* =========================================================
      5. 歐洲／紐澳區域圖片輪播
   ========================================================= */
+/* =========================================================
+   區域旅程輪播｜完整 JS
+   1. 上一張／下一張
+   2. 自動輪播：每 4 秒切換
+   3. 圓點切換
+   4. 左右滑動
+   5. 滑鼠移入暫停，移出繼續
+   6. 視窗尺寸變更時重新渲染
+========================================================= */
 
-  function setupRegionSlider(id) {
-    const root = document.getElementById(id);
-    if (!root) return null;
+function setupRegionSlider(id) {
+  const root = document.getElementById(id);
+  if (!root) return null;
 
-    const track = $(".region-track", root);
-    const prev = $(".region-prev", root);
-    const next = $(".region-next", root);
-    const dots = $(".region-dots", root);
+  const track = $(".region-track", root);
+  const prev = $(".region-prev", root);
+  const next = $(".region-next", root);
+  const dots = $(".region-dots", root);
 
-    if (!track || root.dataset.regionInitialized === "true") {
-      return null;
-    }
-
-    root.dataset.regionInitialized = "true";
-
-    const slides = $$(".region-slide", track);
-    const total = slides.length;
-
-    if (!total) return null;
-
-    let index = 0;
-    let timer = null;
-    let resizeTimer = null;
-    let touchStartX = null;
-    let touchStartY = null;
-
-    const initialIndex = slides.findIndex(slide =>
-      slide.classList.contains("is-active")
-    );
-
-    index = initialIndex >= 0 ? initialIndex : 0;
-
-    function updateSlides() {
-      slides.forEach((slide, i) => {
-        slide.classList.remove("is-active", "is-prev", "is-next");
-
-        if (i === index) {
-          slide.classList.add("is-active");
-        } else if (i === (index - 1 + total) % total) {
-          slide.classList.add("is-prev");
-        } else if (i === (index + 1) % total) {
-          slide.classList.add("is-next");
-        }
-
-        const copy = $(".region-copy", slide);
-
-        if (copy) {
-          copy.style.display = i === index ? "" : "none";
-        }
-      });
-
-      if (dots) {
-        $$("button", dots).forEach((button, i) => {
-          const active = i === index;
-
-          button.classList.toggle("is-active", active);
-          button.classList.toggle("active", active);
-          button.setAttribute(
-            "aria-current",
-            active ? "true" : "false"
-          );
-        });
-      }
-    }
-
-    function render() {
-      updateSlides();
-    }
-
-    function restart() {
-      clearInterval(timer);
-
-      if (total > 1 && !reducedMotionQuery.matches) {
-        timer = setInterval(() => move(1), 6000);
-      }
-    }
-
-    function goTo(target) {
-      index = (target + total) % total;
-      render();
-      restart();
-    }
-
-    function move(step) {
-      goTo(index + step);
-    }
-
-    function buildDots() {
-      if (!dots) return;
-
-      dots.innerHTML = "";
-
-      slides.forEach((slide, i) => {
-        const button = document.createElement("button");
-
-        button.type = "button";
-        button.setAttribute(
-          "aria-label",
-          `切換到第 ${i + 1} 張`
-        );
-
-        button.addEventListener("click", () => goTo(i));
-        dots.appendChild(button);
-      });
-    }
-
-    prev?.addEventListener("click", () => move(-1));
-    next?.addEventListener("click", () => move(1));
-
-    root.addEventListener("mouseenter", () => clearInterval(timer));
-    root.addEventListener("mouseleave", restart);
-
-    root.addEventListener(
-      "touchstart",
-      event => {
-        if (!event.touches.length) return;
-
-        touchStartX = event.touches[0].clientX;
-        touchStartY = event.touches[0].clientY;
-      },
-      { passive: true }
-    );
-
-    root.addEventListener(
-      "touchend",
-      event => {
-        if (
-          touchStartX === null ||
-          touchStartY === null ||
-          !event.changedTouches.length
-        ) {
-          return;
-        }
-
-        const dx =
-          event.changedTouches[0].clientX - touchStartX;
-
-        const dy =
-          event.changedTouches[0].clientY - touchStartY;
-
-        if (
-          Math.abs(dx) > 45 &&
-          Math.abs(dx) > Math.abs(dy) * 1.2
-        ) {
-          move(dx < 0 ? 1 : -1);
-        }
-
-        touchStartX = null;
-        touchStartY = null;
-      },
-      { passive: true }
-    );
-
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(render, 120);
-    });
-
-    buildDots();
-    render();
-    restart();
-
-    return { root, track, render, move };
+  if (!track || root.dataset.regionInitialized === "true") {
+    return null;
   }
 
-  setupRegionSlider("europeRegion");
-  setupRegionSlider("oceaniaRegion");
+  root.dataset.regionInitialized = "true";
 
+  const slides = $$(".region-slide", track);
+  const total = slides.length;
+
+  if (!total) return null;
+
+  let index = 0;
+  let timer = null;
+  let resizeTimer = null;
+  let touchStartX = null;
+  let touchStartY = null;
+
+  /* ========================================
+     初始位置
+  ======================================== */
+
+  const initialIndex = slides.findIndex(slide =>
+    slide.classList.contains("is-active")
+  );
+
+  index = initialIndex >= 0 ? initialIndex : 0;
+
+  /* ========================================
+     更新輪播畫面
+  ======================================== */
+
+  function updateSlides() {
+    slides.forEach((slide, i) => {
+      slide.classList.remove(
+        "is-active",
+        "is-prev",
+        "is-next"
+      );
+
+      if (i === index) {
+        slide.classList.add("is-active");
+      } else if (i === (index - 1 + total) % total) {
+        slide.classList.add("is-prev");
+      } else if (i === (index + 1) % total) {
+        slide.classList.add("is-next");
+      }
+
+      /* 只有目前顯示的行程呈現文字 */
+      const copy = $(".region-copy", slide);
+
+      if (copy) {
+        copy.style.display = i === index ? "" : "none";
+      }
+    });
+
+    /* 更新下方圓點 */
+    if (dots) {
+      $$("button", dots).forEach((button, i) => {
+        const active = i === index;
+
+        button.classList.toggle("is-active", active);
+        button.classList.toggle("active", active);
+
+        button.setAttribute(
+          "aria-current",
+          active ? "true" : "false"
+        );
+      });
+    }
+  }
+
+  function render() {
+    updateSlides();
+  }
+
+  /* ========================================
+     自動輪播
+     4000 = 每 4 秒切換一次
+  ======================================== */
+
+  function restart() {
+    clearInterval(timer);
+    timer = null;
+
+    if (total > 1 && !reducedMotionQuery.matches) {
+      timer = setInterval(() => {
+        move(1);
+      }, 4000);
+    }
+  }
+
+  /* ========================================
+     切換指定頁面
+  ======================================== */
+
+  function goTo(target) {
+    index = (target + total) % total;
+
+    render();
+    restart();
+  }
+
+  /* ========================================
+     上一張／下一張
+  ======================================== */
+
+  function move(step) {
+    goTo(index + step);
+  }
+
+  /* ========================================
+     建立下方圓點
+  ======================================== */
+
+  function buildDots() {
+    if (!dots) return;
+
+    dots.innerHTML = "";
+
+    slides.forEach((slide, i) => {
+      const button = document.createElement("button");
+
+      button.type = "button";
+
+      button.setAttribute(
+        "aria-label",
+        `切換到第 ${i + 1} 張`
+      );
+
+      button.addEventListener("click", () => {
+        goTo(i);
+      });
+
+      dots.appendChild(button);
+    });
+  }
+
+  /* ========================================
+     左右切換按鈕
+  ======================================== */
+
+  prev?.addEventListener("click", () => {
+    move(-1);
+  });
+
+  next?.addEventListener("click", () => {
+    move(1);
+  });
+
+  /* ========================================
+     滑鼠移入暫停，移出繼續
+  ======================================== */
+
+  root.addEventListener("mouseenter", () => {
+    clearInterval(timer);
+    timer = null;
+  });
+
+  root.addEventListener("mouseleave", restart);
+
+  /* ========================================
+     手機觸控開始
+  ======================================== */
+
+  root.addEventListener(
+    "touchstart",
+    event => {
+      if (!event.touches.length) return;
+
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+    },
+    { passive: true }
+  );
+
+  /* ========================================
+     手機左右滑動切換
+  ======================================== */
+
+  root.addEventListener(
+    "touchend",
+    event => {
+      if (
+        touchStartX === null ||
+        touchStartY === null ||
+        !event.changedTouches.length
+      ) {
+        return;
+      }
+
+      const dx =
+        event.changedTouches[0].clientX - touchStartX;
+
+      const dy =
+        event.changedTouches[0].clientY - touchStartY;
+
+      if (
+        Math.abs(dx) > 45 &&
+        Math.abs(dx) > Math.abs(dy) * 1.2
+      ) {
+        move(dx < 0 ? 1 : -1);
+      }
+
+      touchStartX = null;
+      touchStartY = null;
+    },
+    { passive: true }
+  );
+
+  /* ========================================
+     視窗尺寸變更
+  ======================================== */
+
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(() => {
+      render();
+    }, 120);
+  });
+
+  /* ========================================
+     初始化
+  ======================================== */
+
+  buildDots();
+  render();
+  restart();
+
+  return {
+    root,
+    track,
+    render,
+    move
+  };
+}
+
+/* =========================================================
+   啟動輪播
+========================================================= */
+
+setupRegionSlider("europeRegion");
+setupRegionSlider("oceaniaRegion");
 
   /* =========================================================
      6. 經典行程狀態
@@ -735,8 +831,6 @@
 
   /* =========================================================
      9A. 經典行程圓點
-     對應 HTML：#europeClassicDots / #oceaniaClassicDots
-     每個圓點代表一個可切換的位置；沿用原有 HTML 卡片
   ========================================================= */
 
   function getClassicDots(type) {
@@ -762,7 +856,6 @@
       type === "europe" ? "歐洲經典行程頁面切換" : "紐澳經典行程頁面切換"
     );
 
-    // 沒有可切換位置時仍保留一個圓點，讓目前狀態清楚可見。
     for (let index = 0; index < dotCount; index += 1) {
       const button = document.createElement("button");
       button.type = "button";
@@ -844,7 +937,6 @@
 
   /* =========================================================
      11. 歐洲經典行程篩選
-     直接控制 HTML 卡片，不建立、不刪除卡片
   ========================================================= */
 
   function filterEuropeCards(category) {
@@ -867,10 +959,6 @@
 
   /* =========================================================
      12. 紐澳經典行程篩選
-     直接控制 HTML 卡片，不建立、不刪除卡片
-     HTML 必須設定：
-     data-country="newzealand"
-     data-country="australia"
   ========================================================= */
 
   function filterOceaniaCards(category) {
@@ -882,7 +970,6 @@
 
       card.style.display = isMatch ? "" : "none";
 
-      // 切換分類時收合推薦行程
       card.classList.remove("is-open");
 
       const toggle = $(".trip-toggle", card);
@@ -944,8 +1031,6 @@
 
   /* =========================================================
      14. 區域篩選按鈕
-     歐洲：western / eastern / southern / northern
-     紐澳：newzealand / australia
   ========================================================= */
 
   $$("[data-filter-group]").forEach(group => {
@@ -1008,7 +1093,6 @@
 
   /* =========================================================
      16. 初始化經典行程
-     不產生、不刪除任何行程卡片
   ========================================================= */
 
   function initializeClassicFilters() {
