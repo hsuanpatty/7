@@ -1013,9 +1013,11 @@ header .container {
 }
 
 
+
 /* =========================================================
    6. 精選旅程 (Featured Section)
    ========================================================= */
+
 .featured-section {
   position: relative;
   padding: 95px 0 105px;
@@ -1026,6 +1028,7 @@ header .container {
    整體版面
    桌機往左移 35px，版面加寬至 110%
 ======================================== */
+
 .featured-layout {
   position: relative;
   left: -35px;
@@ -1041,7 +1044,6 @@ header .container {
    左側箭頭控制
 ======================================== */
 
-
 .classic-arrows .circle-btn {
   display: flex;
   align-items: center;
@@ -1050,6 +1052,7 @@ header .container {
   width: 38px;
   height: 38px;
   padding: 0;
+  padding-bottom: 4px;
 
   border: 1px solid rgba(142, 117, 84, 0.55);
   border-radius: 50%;
@@ -1063,8 +1066,6 @@ header .container {
     background 0.25s ease,
     color 0.25s ease,
     border-color 0.25s ease;
-
-  padding-bottom: 4px;
 }
 
 /* 左箭頭：透明背景 */
@@ -1074,7 +1075,7 @@ header .container {
 
 /* 右箭頭：預設奶油米白背景 */
 .classic-arrows button[data-classic-next] {
-  background: #eee4d8;;
+  background: #eee4d8;
 }
 
 /* 滑過時：轉為金棕色 */
@@ -1084,12 +1085,11 @@ header .container {
   border-color: var(--gold-dark);
 }
 
-
-
 /* ========================================
    輪播視窗
    桌機：限制顯示範圍，避免第四個行程露出
 ======================================== */
+
 .featured-slider {
   position: relative;
   width: calc(50vw + 50%);
@@ -1104,6 +1104,7 @@ header .container {
    輪播軌道
    保留原本 JS 控制的位移效果
 ======================================== */
+
 .featured-track {
   display: flex;
   align-items: center;
@@ -1111,15 +1112,20 @@ header .container {
   width: max-content;
   max-width: none;
   transform: translate3d(0, 0, 0);
+
+  /* 保留原本的輪播移動速度 */
   transition:
     transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
+
   will-change: transform;
 }
 
 /* ========================================
    行程卡片
+   慢慢放大、慢慢縮小
 ======================================== */
 
+/* 行程卡片 */
 .featured-item {
   position: relative;
   flex: 0 0 500px;
@@ -1128,10 +1134,12 @@ header .container {
   opacity: 0.78;
   transform: scale(0.96);
   transform-origin: center center;
-  /* transition:
-    opacity 0.45s ease,
-    transform 0.45s ease; */
   box-sizing: border-box;
+
+  /* 平滑縮放，避免動畫太明顯 */
+  transition:
+    transform 0.8s ease-in-out,
+    opacity 0.8s ease-in-out;
 }
 
 /* 目前選中的卡片 */
@@ -1154,6 +1162,7 @@ header .container {
 /* ========================================
    行程圖片
 ======================================== */
+
 .featured-photo {
   display: block;
   width: 100%;
@@ -1174,14 +1183,14 @@ header .container {
 /* ========================================
    行程資訊
 ======================================== */
+
 .featured-info {
   padding: 14px 3px 0;
   visibility: visible;
   opacity: 1;
-  /* transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease; */
   box-sizing: border-box;
+
+  /* 保留原本文字顯示設定 */
 }
 
 .featured-info > span {
@@ -1223,6 +1232,7 @@ header .container {
 /* ========================================
    行程詳細按鈕
 ======================================== */
+
 .featured-detail-btn {
   display: inline-flex;
   align-items: center;
@@ -1231,19 +1241,25 @@ header .container {
   min-width: 132px;
   margin-top: 18px;
   padding: 10px 16px;
+
   border: 1px solid rgba(142, 117, 84, 0.65);
   border-radius: 0;
+
   background: transparent;
   color: var(--gold-dark);
+
   font-size: 14px;
   letter-spacing: 0.1em;
   line-height: 1.5;
+
   text-decoration: none;
   cursor: pointer;
+
   transition:
     color 0.25s ease,
     background 0.25s ease,
     border-color 0.25s ease;
+
   float: right;
 }
 
@@ -1268,6 +1284,7 @@ header .container {
 /* ========================================
    區塊標題
 ======================================== */
+
 .section-heading {
   display: flex;
   align-items: flex-end;
@@ -1293,6 +1310,7 @@ header .container {
 /* ========================================
    其他輪播控制與圓點
 ======================================== */
+
 .slider-controls,
 .classic-arrows {
   display: flex;
@@ -1300,43 +1318,53 @@ header .container {
 }
 
 .circle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 65px;
-    height: 30px;
-    padding: 0 0 5px;
-    border: 1px solid rgba(142, 117, 84, 0.55);
-    border-radius: 20px;
-    background: transparent;
-    color: var(--europe-gold);
-    font-family: Arial, sans-serif;
-    font-size: 25px;
-    line-height: 1;
-    cursor: pointer;
-    box-shadow: none;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 65px;
+  height: 30px;
+  padding: 0 0 5px;
+
+  border: 1px solid rgba(142, 117, 84, 0.55);
+  border-radius: 20px;
+
+  background: transparent;
+  color: var(--europe-gold);
+
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+  box-shadow: none;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .featured-left-controls {
-    position: relative;
-    z-index: 30;
+  position: relative;
+  z-index: 30;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 14px;
-    width: auto;
-    margin: 0;
-    padding: 0;
-    transform: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
 
-    right: 20px;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  transform: none;
+
+  right: 20px;
 }
 
 .featured-left-controls .circle-btn.next {
-    background: #eee4d8;
+  background: #eee4d8;
 }
 
 .circle-btn:hover {
@@ -1344,6 +1372,10 @@ header .container {
   color: #1f0808;
   border-color: var(--gold-dark);
 }
+
+/* ========================================
+   輪播圓點
+======================================== */
 
 .slider-dots {
   display: flex;
@@ -1356,13 +1388,17 @@ header .container {
 .slider-dots button {
   display: block;
   flex: 0 0 auto;
+
   width: 7px;
   height: 7px;
   padding: 0;
+
   border: 0;
   border-radius: 50%;
+
   background: #cfc2b4;
   cursor: pointer;
+
   transition:
     width 0.25s ease,
     background 0.25s ease;
@@ -1373,6 +1409,7 @@ header .container {
   border-radius: 10px;
   background: var(--gold-dark);
 }
+
 
 /* ========================================
    桌面解析度微調
@@ -1613,7 +1650,7 @@ header .container {
     linear-gradient(
       135deg,
       #f5eee3 0%,
-      #e9dcc9 48%,
+      #b68d50 48%,
       #f3e9da 100%
     );
 }
@@ -3832,5 +3869,26 @@ header .container {
     flex-basis: 20px;
     width: 20px;
     height: 6px;
+  }
+}
+
+
+/* =========================================================
+   精選旅程｜切換效果微調
+   搭配 brand-main.js 的 0.8 秒平順切換
+   不覆蓋卡片原有尺寸、位置、縮放及響應式設定
+========================================================= */
+.featured-track {
+  will-change: transform;
+}
+
+/* 尊重使用者的減少動態效果設定 */
+@media (prefers-reduced-motion: reduce) {
+  .featured-track {
+    transition: none !important;
+  }
+
+  .featured-item {
+    transition-duration: 0.01ms !important;
   }
 }
