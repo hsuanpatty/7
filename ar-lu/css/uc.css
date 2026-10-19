@@ -1,0 +1,3836 @@
+@charset "UTF-8";
+
+/* =========================================================
+   1. 全域變數與基礎設定 (Root & Base Settings)
+   ========================================================= */
+:root {
+  --ink: #4b4038;
+  --ink2: rgb(36, 32, 29);
+  --muted: #88796c;
+  --gold: #b39a75;
+  --gold2: #9E7557;
+  --gold-dark: #8e7554;
+  --paper: #f8f2eb;
+  --paper-2: #efe3d6;
+  --white: #fffdf9;
+  --line: rgba(142, 117, 84, .38);
+  
+  /* 品牌核心色系 */
+  --core-bg: #faf6ef;
+  --core-card-bg: #f4eee5;
+  --core-gold: #b49a72;
+  --core-gold-dark: #927653;
+  --core-text: #493b30;
+  --core-muted: #927653;
+  
+  /* 典藏質感強化色系 */
+  --lux-gold: #b89a6a;
+  --lux-gold-light: #dfc9a3;
+  --lux-brown: #463329;
+  --lux-rose: #8c6558;
+  --lux-ivory: #fcf8f1;
+
+  --shadow: 0 14px 38px rgba(68, 53, 40, .08);
+  --serif: "Times New Roman", "Noto Serif TC", serif;
+  --sans: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+  --max: 1180px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--lux-ivory);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.section-inner {
+  width: min(calc(100% - 80px), var(--max));
+  margin: 0 auto;
+}
+
+.section-paper {
+  background:
+    linear-gradient(rgba(255,255,255,.68), rgba(255,255,255,.68)),
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(179,154,117,.07) 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, rgba(179,154,117,.07) 24px),
+    var(--paper);
+}
+
+.section-white {
+  background: #fffdfa;
+}
+
+
+/* =========================================================
+   2. 導覽列與標誌 (Header & Logo)
+   ========================================================= */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background: rgba(255, 253, 248, .97);
+  height: 66px;
+  border-bottom: 1px solid rgba(184, 154, 106, .38);
+  box-shadow: 0 5px 24px rgba(65, 44, 30, .055);
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(223,201,163,.8), rgba(184,154,106,.55), transparent);
+  pointer-events: none;
+}
+
+header .container {
+  width: 90vw;
+  max-width: 1650px;
+  height: 66px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 45px;
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 575.98px) {
+  header {
+    height: 55px;
+  }
+  header .container {
+    height: 55px;
+  }
+  .logo img {
+    height: 35px;
+  }
+}
+
+
+/* =========================================================
+   3. 頂部主視覺 (Hero Section)
+   ========================================================= */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  height: 520px;
+  max-height: none;
+  overflow: hidden;
+  background: #d8c5ad;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(90deg, rgba(54,37,20,.15), transparent 55%),
+    url("../images/ar-ul/banner-1.jpg") center center / cover no-repeat;
+  transform: scale(1.02);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(36,26,17,.12),
+    transparent 55%,
+    rgba(36,26,17,.18)
+  );
+}
+
+.hero-content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 15px rgba(0,0,0,.28);
+  padding-top: 140px;
+}
+
+.hero-content .eyebrow {
+  margin: 0 0 8px;
+  font-size: 10px;
+  letter-spacing: .42em;
+}
+
+.hero-content h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(35px, 3vw, 50px);
+  font-weight: 400;
+  letter-spacing: .18em;
+}
+
+.hero-content p:last-child {
+  margin: 7px 0 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: 0.08rem;
+}
+
+@media (max-width: 991px) {
+  .hero {
+    height: 360px;
+  }
+  .hero-content {
+    padding-top: 90px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    height: 280px;
+  }
+  .hero-content {
+    padding: 55px 20px 0;
+  }
+  .hero-content .eyebrow {
+    margin-bottom: 6px;
+    font-size: 8px;
+    letter-spacing: .28em;
+  }
+  .hero-content h1 {
+    font-size: clamp(28px, 8vw, 40px);
+    letter-spacing: .12em;
+  }
+  .hero-content p:last-child {
+    margin-top: 6px;
+    font-size: 10px;
+    letter-spacing: .12em;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero {
+    height: 300px;
+  }
+  .hero-content {
+    padding-top: 85px;
+  }
+  .hero-content h1 {
+    font-size: 29px;
+  }
+  .hero-content p:last-child {
+    font-size: 9px;
+  }
+}
+
+
+/* =========================================================
+   4. 品牌起源與介紹 (Brand Origin Section)
+   ========================================================= */
+.brand-section {
+  padding: 105px 0 60px;
+}
+
+.origin-section {
+  padding: 10px 0;
+}
+
+.brand-heading {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto 75px;
+  padding: 0 70px;
+  text-align: center;
+}
+
+.brand-heading .section-kicker,
+.section-kicker,
+.classic-heading .section-kicker {
+  color: var(--lux-rose);
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.brand-heading .brand-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  margin: 0;
+  color: var(--lux-brown);
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .12em;
+  text-shadow: 0 1px 0 rgba(255,255,255,.7);
+}
+
+.brand-title-word {
+  display: inline-block;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.brand-title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  margin: 0 3px;
+}
+
+.brand-title-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-heading p {
+  margin: 18px auto 0;
+  color: #20201f;
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 2;
+  letter-spacing: .12em;
+}
+
+.brand-heading p .brand-subtitle-highlight {
+  color: var(--gold2);
+  font-size: 20px;
+  letter-spacing: .1rem;
+}
+
+.brand-heading-icon {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  opacity: .65;
+}
+
+.brand-heading-icon img {
+  display: block;
+  width: 60%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-heading-icon-left {
+  left: 90px;
+}
+
+.brand-heading-icon-right {
+  right: 90px;
+  bottom: -8px;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.brand-copy {
+  width: 100%;
+  max-width: 480px;
+  padding-left: 50px;
+}
+
+.brand-copy h2,
+.brand-copy h3 {
+  margin: 18px 0 28px;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(27px, 3vw, 40px);
+  line-height: 1.45;
+  letter-spacing: .08em;
+  color: var(--lux-brown);
+}
+
+.brand-copy .ornament {
+  font-family: Georgia, serif;
+  color: var(--gold);
+  font-size: 48px;
+  line-height: 1;
+  height: 28px;
+}
+
+.brand-copy p {
+  margin: 18px 0 30px;
+  max-width: 430px;
+  color: #776b61;
+  font-size: 16px;
+  line-height: 2.1;
+  letter-spacing: .07em;
+  text-align: justify;
+}
+
+.brand-line {
+  position: relative;
+  width: 180px;
+  height: 110px;
+  margin-top: 30px;
+  overflow: hidden;
+}
+
+.brand-line img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform .6s ease;
+}
+
+.brand-line:hover img {
+  transform: scale(1.03);
+}
+
+.brand-photo {
+  position: relative;
+  display: block;
+  width: 95%;
+  min-width: 0;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.brand-photo img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform .8s ease;
+}
+
+.brand-photo:hover img {
+  transform: scale(1.01);
+}
+
+@media (min-width: 1400px) {
+  .brand-grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    gap: 30px;
+  }
+  .origin-section .section-inner {
+    width: min(calc(100% - 80px), 1300px);
+    margin: 0 auto;
+  }
+  .brand-photo {
+    width: 85%;
+    height: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 991px) {
+  .brand-section,
+  .origin-section {
+    padding: 80px 0 85px;
+  }
+  .brand-heading {
+    margin-bottom: 0;
+    padding: 0 55px;
+  }
+  .brand-heading h2,
+  .brand-heading .brand-title {
+    font-size: 32px;
+    white-space: nowrap;
+    gap: 0;
+  }
+  .brand-title-icon {
+    width: 30px;
+    height: 30px;
+    margin: 0 2px;
+  }
+  .brand-heading p {
+    font-size: 12px;
+  }
+  .brand-heading p .brand-subtitle-highlight {
+    color: var(--gold2);
+    font-size: 12px;
+  }
+  .brand-heading-icon {
+    width: 38px;
+    height: 38px;
+    opacity: .6;
+  }
+  .brand-grid {
+    grid-template-columns: 0.82fr 1.18fr;
+    gap: 40px;
+  }
+  .brand-copy {
+    width: 100%;
+    padding-left: 20px;
+    max-width: none;
+  }
+  .brand-copy h2,
+  .brand-copy h3 {
+    font-size: 30px;
+    letter-spacing: .06em;
+  }
+  .brand-copy p {
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 2;
+  }
+  .brand-line {
+    width: 160px;
+    height: 100px;
+    margin-top: 28px;
+  }
+  .brand-photo {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .brand-section,
+  .origin-section {
+    padding: 65px 20px 70px;
+  }
+  .brand-heading {
+    padding: 0 42px;
+  }
+  .brand-heading .section-kicker {
+    margin-bottom: 10px;
+    font-size: 10px;
+    letter-spacing: .20em;
+  }
+  .brand-heading .brand-title {
+    font-size: 26px;
+    line-height: 1.5;
+    letter-spacing: .06em;
+  }
+  .brand-title-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 1px;
+  }
+  .brand-heading p {
+    margin-top: 14px;
+    font-size: 11px;
+    line-height: 1.9;
+    letter-spacing: .06em;
+  }
+  .brand-heading-icon {
+    width: 30px;
+    height: 30px;
+    opacity: .55;
+  }
+  .brand-heading-icon-left {
+    top: -5px;
+    left: 5px;
+  }
+  .brand-heading-icon-right {
+    right: 5px;
+    bottom: -5px;
+  }
+  .brand-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 38px;
+    align-items: stretch;
+  }
+  .brand-copy {
+    width: 100%;
+    padding-left: 0;
+    max-width: none;
+  }
+  .brand-copy h2,
+  .brand-copy h3 {
+    margin: 15px 0 22px;
+    font-size: 26px;
+    line-height: 1.55;
+  }
+  .brand-copy .ornament {
+    font-size: 42px;
+    height: 24px;
+  }
+  .brand-copy p {
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 2;
+  }
+  .brand-line {
+    width: 150px;
+    height: 90px;
+    margin-top: 25px;
+  }
+  .brand-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .origin-section {
+    padding: 40px 10px;
+  }
+  .brand-section {
+    padding: 55px 18px 0;
+  }
+  .brand-heading {
+    padding: 0 32px;
+  }
+  .brand-heading .brand-title {
+    font-size: 30px;
+    line-height: 1.55;
+  }
+  .brand-title-word {
+    padding: 0 4px;
+  }
+  .brand-title-icon {
+    width: 21px;
+    height: 21px;
+  }
+  .brand-heading p {
+    font-size: 16px;
+  }
+  .brand-heading p .brand-subtitle-highlight {
+    font-size: 16px;
+  }
+  .brand-heading-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .brand-grid {
+    gap: 32px;
+  }
+  .section-inner {
+    width: min(calc(100% - 15px), var(--max));
+  }
+  .brand-copy h2,
+  .brand-copy h3 {
+    font-size: 24px;
+  }
+  .brand-copy p {
+    font-size: 16px;
+  }
+  .brand-line {
+    width: 130px;
+    height: 80px;
+    margin-top: 22px;
+  }
+}
+
+
+/* =========================================================
+   5. 品牌核心 (Brand Essence Section)
+   ========================================================= */
+.core-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  padding: 60px 0;
+  background:
+    radial-gradient(ellipse at 90% 10%, rgba(184,154,106,.12), transparent 34%),
+    linear-gradient(135deg, #f8f1e7 0%, #fffaf2 52%, #f1e6d9 100%);
+  border-top: 1px solid rgba(179, 154, 117, 0.28);
+  border-bottom: 1px solid rgba(179, 154, 117, 0.28);
+  box-sizing: border-box;
+}
+
+.core-wrap {
+  position: relative;
+  z-index: 2;
+  width: calc(100% - 48px);
+  max-width: 1050px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+.core-title {
+  position: relative;
+  order: 1;
+  flex: 0 0 125px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  text-align: left;
+  transform: translateX(-45px);
+}
+
+.core-title-text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 120px;
+  padding: 8px 0;
+  background-color: var(--core-bg);
+  text-align: left;
+}
+
+.core-title-cn {
+  display: block;
+  color: var(--core-text);
+  font-family: var(--serif, "Noto Serif TC", serif);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.8;
+  white-space: nowrap;
+}
+
+.core-title-text small {
+  display: block;
+  margin-top: 2px;
+  color: var(--lux-rose);
+  font-family: var(--serif, Georgia, serif);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.core-cards {
+  order: 2;
+  flex: 0 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 180px);
+  justify-content: center;
+  gap: 16px;
+}
+
+.core-card {
+  position: relative;
+  z-index: 0;
+  width: 180px;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 145px;
+  padding: 11px 5px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid rgba(184,154,106,.48);
+  background: linear-gradient(145deg, rgba(255,254,250,.96), rgba(246,237,224,.92));
+  border-radius: 10px 25px 10px 25px;
+  box-shadow: 0 10px 26px rgba(68,53,40,.065), inset 0 0 0 3px rgba(255,255,255,.42);
+  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.core-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -5px;
+  bottom: -5px;
+  width: 100%;
+  height: 100%;
+  border-radius: 11px;
+  background: rgba(203, 181, 148, 0.15);
+  pointer-events: none;
+}
+
+.core-icon {
+  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.core-icon img {
+  display: block;
+  width: 80px;
+  height: 80px;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+.core-card strong {
+  display: block;
+  max-width: 100%;
+  color: var(--core-text);
+  font-family: var(--serif, "Noto Serif TC", serif);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+
+.core-card > small {
+  display: block;
+  max-width: 100%;
+  margin-top: -3px;
+  margin-bottom: 4px;
+  color: var(--core-muted);
+  font-family: var(--serif, Georgia, serif);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.035em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .core-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(168,133,86,.78);
+    box-shadow: 0 16px 34px rgba(68,53,40,.12), inset 0 0 0 3px rgba(255,255,255,.55);
+    background-color: #fffefb;
+  }
+}
+
+@media (min-width: 1400px) {
+  .core-wrap {
+    max-width: 1250px;
+    gap: 35px;
+  }
+  .core-title {
+    order: 1;
+    flex: 0 0 125px;
+    transform: translateX(-90px);
+  }
+  .core-cards {
+    order: 2;
+    grid-template-columns: repeat(4, 180px);
+    justify-content: center;
+    gap: 40px;
+  }
+  .core-card {
+    width: 180px;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1399px) {
+  .core-wrap {
+    width: calc(100% - 40px);
+    max-width: 1200px;
+    gap: 18px;
+  }
+  .core-title {
+    order: 1;
+    flex: 0 0 115px;
+    transform: translateX(-45px);
+  }
+  .core-title-cn {
+    font-size: 28px;
+  }
+  .core-title-text small {
+    font-size: 14px;
+  }
+  .core-cards {
+    order: 2;
+    grid-template-columns: repeat(4, 180px);
+    gap: 16px;
+  }
+  .core-card {
+    width: 180px;
+    min-height: 145px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .core-section {
+    padding: 22px 0;
+  }
+  .core-wrap {
+    width: calc(100% - 32px);
+    max-width: 960px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 14px;
+  }
+  .core-title {
+    justify-content: center;
+    text-align: center;
+  }
+  .core-title-text {
+    align-items: center;
+  }
+  .core-title-cn {
+    font-size: 30px;
+  }
+  .core-title-text small {
+    font-size: 15px;
+  }
+  .core-cards {
+    order: 1;
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .core-card {
+    width: 100%;
+    min-height: 145px;
+    padding: 12px 2px;
+  }
+  .core-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 6px;
+  }
+  .core-icon img {
+    width: 60px;
+    height: 60px;
+  }
+  .core-card strong {
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+  .core-card > small {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .core-section {
+    padding: 22px 0 24px;
+  }
+  .core-wrap {
+    width: calc(100% - 20px);
+    max-width: 600px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .core-title {
+    order: 0;
+    flex: none;
+    width: 100%;
+    min-height: 42px;
+    justify-content: center;
+    transform: none;
+  }
+  .core-cards {
+    order: 1;
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+  }
+  .core-card {
+    width: 100%;
+    min-height: 125px;
+    padding: 10px 1px 8px;
+    box-shadow: 3px 3px 0 rgba(179, 154, 117, 0.2);
+  }
+  .core-card strong {
+    font-size: 16px;
+  }
+  .core-card > small {
+    font-size: 14px;
+    white-space: normal;
+  }
+  .core-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .core-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 12px;
+    row-gap: 13px;
+  }
+}
+
+
+/* =========================================================
+   6. 精選旅程 (Featured Section)
+   ========================================================= */
+.featured-section {
+  position: relative;
+  padding: 95px 0 105px;
+  overflow: hidden;
+}
+
+/* ========================================
+   整體版面
+   桌機往左移 35px，版面加寬至 110%
+======================================== */
+.featured-layout {
+  position: relative;
+  left: -35px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  width: 110%;
+  overflow: visible;
+}
+
+/* ========================================
+   左側箭頭控制
+======================================== */
+
+
+.classic-arrows .circle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+  padding: 0;
+
+  border: 1px solid rgba(142, 117, 84, 0.55);
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--gold-dark);
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+
+  padding-bottom: 4px;
+}
+
+/* 左箭頭：透明背景 */
+.classic-arrows button[data-classic-prev] {
+  background: transparent;
+}
+
+/* 右箭頭：預設奶油米白背景 */
+.classic-arrows button[data-classic-next] {
+  background: #eee4d8;;
+}
+
+/* 滑過時：轉為金棕色 */
+.classic-arrows .circle-btn:hover {
+  background: var(--gold-dark);
+  color: #fff;
+  border-color: var(--gold-dark);
+}
+
+
+
+/* ========================================
+   輪播視窗
+   桌機：限制顯示範圍，避免第四個行程露出
+======================================== */
+.featured-slider {
+  position: relative;
+  width: calc(50vw + 50%);
+  margin-right: calc(50% - 50vw);
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 28px 0 30px;
+}
+
+/* ========================================
+   輪播軌道
+   保留原本 JS 控制的位移效果
+======================================== */
+.featured-track {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  width: max-content;
+  max-width: none;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
+  will-change: transform;
+}
+
+/* ========================================
+   行程卡片
+======================================== */
+
+.featured-item {
+  position: relative;
+  flex: 0 0 500px;
+  width: 500px;
+  min-width: 0;
+  opacity: 0.78;
+  transform: scale(0.96);
+  transform-origin: center center;
+  /* transition:
+    opacity 0.45s ease,
+    transform 0.45s ease; */
+  box-sizing: border-box;
+}
+
+/* 目前選中的卡片 */
+.featured-item.is-active {
+  z-index: 2;
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+/* 非作用中卡片隱藏文字 */
+.featured-item:not(.is-active) .featured-info {
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  pointer-events: none;
+}
+
+/* ========================================
+   行程圖片
+======================================== */
+.featured-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background: var(--bg) center / cover no-repeat;
+  overflow: hidden;
+}
+
+.featured-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ========================================
+   行程資訊
+======================================== */
+.featured-info {
+  padding: 14px 3px 0;
+  visibility: visible;
+  opacity: 1;
+  /* transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease; */
+  box-sizing: border-box;
+}
+
+.featured-info > span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--gold-dark);
+  font-family: var(--serif);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  line-height: 1.6;
+}
+
+.featured-info h3 {
+  margin: 5px 0;
+  color: var(--ink2);
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  line-height: 1.55;
+  overflow-wrap: break-word;
+}
+
+.featured-info time {
+  display: block;
+  color: var(--gold-dark);
+  font-size: 16px;
+  letter-spacing: 0.07em;
+  line-height: 1.7;
+}
+
+.featured-info p {
+  color: #5a524a;
+  font-size: 16px;
+  line-height: 2.1;
+  letter-spacing: 0.07em;
+}
+
+/* ========================================
+   行程詳細按鈕
+======================================== */
+.featured-detail-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: 132px;
+  margin-top: 18px;
+  padding: 10px 16px;
+  border: 1px solid rgba(142, 117, 84, 0.65);
+  border-radius: 0;
+  background: transparent;
+  color: var(--gold-dark);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+  float: right;
+}
+
+.featured-detail-btn::after {
+  content: "→";
+  display: inline-block;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  transition: transform 0.25s ease;
+}
+
+.featured-detail-btn:hover {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+  color: #fff;
+}
+
+.featured-detail-btn:hover::after {
+  transform: translateX(4px);
+}
+
+/* ========================================
+   區塊標題
+======================================== */
+.section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  transform: translate(0, 70px);
+  z-index: 3;
+}
+
+.section-heading h2,
+.classic-heading h2 {
+  display: block;
+  color: var(--core-text);
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.8;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+
+/* ========================================
+   其他輪播控制與圓點
+======================================== */
+.slider-controls,
+.classic-arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.circle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 30px;
+    padding: 0 0 5px;
+    border: 1px solid rgba(142, 117, 84, 0.55);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--europe-gold);
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.featured-left-controls {
+    position: relative;
+    z-index: 30;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    transform: none;
+
+    right: 20px;
+}
+
+.featured-left-controls .circle-btn.next {
+    background: #eee4d8;
+}
+
+.circle-btn:hover {
+  background: var(--gold-dark);
+  color: #1f0808;
+  border-color: var(--gold-dark);
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+}
+
+.slider-dots button {
+  display: block;
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #cfc2b4;
+  cursor: pointer;
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
+}
+
+.slider-dots button.is-active {
+  width: 24px;
+  border-radius: 10px;
+  background: var(--gold-dark);
+}
+
+/* ========================================
+   桌面解析度微調
+======================================== */
+@media (min-width: 992px) {
+  .featured-layout {
+    left: 20px;
+    width: 100%;
+  }
+  .featured-slider {
+    overflow: hidden;
+  }
+  .featured-track {
+    gap: 30px;
+  }
+  .featured-item {
+    flex: 0 0 500px;
+    width: 500px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .featured-layout {
+    left: -35px;
+    width: 110%;
+  }
+  .featured-item {
+    flex-basis: 520px;
+    width: 520px;
+  }
+  .featured-track {
+    gap: 34px;
+  }
+  .featured-slider {
+    padding-top: 32px;
+    padding-bottom: 34px;
+  }
+}
+
+/* ========================================
+   平板 (修正標題重疊與箭頭裁切)
+======================================== */
+@media (max-width: 991px) {
+  .featured-section {
+    padding: 75px 0 85px;
+  }
+  .section-heading {
+    transform: none; /* 消除向下位移，避免遮擋照片 */
+    margin-bottom: 24px;
+  }
+  .featured-layout {
+    left: 0;
+    width: 100%;
+    grid-template-columns: 1fr; /* 改為單欄排版 */
+    gap: 16px;
+  }
+  .featured-left-controls {
+    position: relative;
+    right: auto;
+    flex-direction: row; /* 箭頭改為水平置中排列 */
+    justify-content: center;
+    gap: 16px;
+    order: 2; /* 放在輪播下方 */
+    margin-top: 14px;
+  }
+  .featured-left-controls .circle-btn {
+    width: 65px;
+    height: 35px;
+    font-size: 24px;
+    padding-bottom: 1px;
+  }
+  .featured-slider {
+    width: 100%;
+    margin-right: 0;
+    padding: 22px 0 24px;
+    order: 1;
+  }
+  .featured-track {
+    gap: 22px;
+  }
+  .featured-item {
+    flex-basis: 380px;
+    width: 380px;
+  }
+  .featured-item.is-active {
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   手機 (完美適應小螢幕)
+======================================== */
+@media (max-width: 767px) {
+  .featured-section {
+    padding: 58px 15px; /* 增加左右留白防貼邊 */
+  }
+  .section-heading {
+    transform: none;
+    margin-bottom: 16px;
+  }
+  .section-heading h2 {
+    font-size: 24px;
+    white-space: normal;
+  }
+  .featured-layout {
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .featured-slider {
+    width: 100%;
+    margin-right: 0;
+    padding: 10px 0;
+    order: 1;
+  }
+  .featured-left-controls {
+    position: relative;
+    right: auto;
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    order: 2;
+    margin-top: 10px;
+  }
+  .featured-track {
+    gap: 16px;
+  }
+  .featured-item {
+    flex-basis: 85vw;
+    width: 85vw;
+    opacity: 0.85;
+    transform: none;
+  }
+  .featured-item.is-active {
+    opacity: 1;
+    transform: none;
+  }
+  .featured-photo {
+    aspect-ratio: 4 / 3;
+  }
+  .featured-info {
+    padding: 10px 2px 0;
+  }
+  .featured-info h3 {
+    font-size: 20px;
+  }
+  .featured-info p {
+    font-size: 16px;
+    line-height: 1.8;
+    padding-top: 5px;
+  }
+  .featured-detail-btn {
+    min-width: 120px;
+    margin-top: 13px;
+    padding: 9px 13px;
+    font-size: 15px;
+    float: left;
+  }
+
+  .slider-dots {
+    margin-top: 25px;
+  }
+}
+
+/* ========================================
+   小尺寸手機
+======================================== */
+@media (max-width: 390px) {
+  .featured-section {
+    padding: 48px 10px 55px;
+  }
+  .section-heading h2 {
+    font-size: 21px;
+  }
+  .featured-item {
+    flex-basis: 90vw;
+    width: 90vw;
+  }
+}
+
+/* =========================================================
+   7. 歐洲與紐澳區塊 (Europe & Oceania Region Carousels)
+   ========================================================= */
+.europe-region,
+.europe-region * {
+  box-sizing: border-box;
+}
+
+.europe-region {
+  --europe-bg: #f5eee3;
+  --europe-gold: #b28a55;
+  --europe-text: #493629;
+  --europe-muted: rgba(73, 54, 41, 0.82);
+
+  --europe-font-zh:
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
+
+  --europe-font-en:
+    "Cormorant Garamond",
+    "Georgia",
+    "Times New Roman",
+    serif;
+
+  --europe-image-brightness: 1.06;
+  --europe-image-contrast: 0.98;
+  --europe-image-saturate: 0.92;
+  --europe-image-sepia: 0.06;
+
+  position: relative;
+  isolation: isolate;
+  width: 100vw;
+  max-width: 100%;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 85px 0 70px;
+  overflow: hidden;
+
+  color: var(--europe-text);
+  font-family: var(--europe-font-zh);
+
+  background:
+    radial-gradient(
+      ellipse at 18% 18%,
+      rgba(255, 252, 244, 0.96) 0%,
+      rgba(247, 239, 225, 0.55) 38%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse at 85% 78%,
+      rgba(190, 158, 119, 0.20) 0%,
+      transparent 48%
+    ),
+    linear-gradient(
+      135deg,
+      #f5eee3 0%,
+      #e9dcc9 48%,
+      #f3e9da 100%
+    );
+}
+
+/* ========================================
+   背景裝飾
+======================================== */
+
+.europe-region::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 15%,
+      rgba(255, 255, 255, 0.30) 50%,
+      transparent 85%
+    );
+}
+
+/* ========================================
+   滿版內容容器
+======================================== */
+
+.europe-region .section-inner {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ========================================
+   輪播容器
+======================================== */
+
+.europe-region .region-slider {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+/* ========================================
+   3D 軌道
+======================================== */
+
+.europe-region .region-track {
+  position: relative;
+  width: 100%;
+  height: 500px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  perspective: 1600px;
+  will-change: transform;
+}
+
+/* ========================================
+   輪播卡片
+======================================== */
+
+.europe-region .region-slide {
+  position: absolute;
+
+  width: min(1180px, 88vw);
+  max-width: none;
+  height: 450px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(36px, 4vw, 76px);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease,
+    visibility 0s linear 0.7s;
+}
+
+/* ========================================
+   左側預覽卡片
+======================================== */
+
+.europe-region .region-slide.is-prev {
+  opacity: 0.78;
+  visibility: visible;
+
+  transform:
+    translateX(-78%)
+    translateZ(-180px)
+    rotateY(16deg)
+    scale(0.86);
+
+  transform-origin: center center;
+  filter: none;
+  z-index: 1;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+/* ========================================
+   右側預覽卡片
+======================================== */
+
+.europe-region .region-slide.is-next {
+  opacity: 0.78;
+  visibility: visible;
+
+  transform:
+    translateX(78%)
+    translateZ(-180px)
+    rotateY(-16deg)
+    scale(0.86);
+
+  transform-origin: center center;
+  filter: none;
+  z-index: 1;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+/* ========================================
+   中間主卡片
+======================================== */
+
+.europe-region .region-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translateX(0)
+    translateZ(0)
+    rotateY(0deg)
+    scale(1);
+
+  transform-origin: center center;
+  pointer-events: auto;
+  filter: none;
+  z-index: 10;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+/* ========================================
+   照片
+======================================== */
+
+.europe-region .region-image {
+  position: relative;
+  flex: 0 0 52%;
+  height: 420px;
+  min-width: 0;
+
+  overflow: hidden;
+  border-radius: 2px;
+  border: 5px solid rgba(255, 250, 241, 0.96);
+
+  background-color: #d8c5ad;
+  background-image: var(--bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  filter:
+    brightness(var(--europe-image-brightness))
+    contrast(var(--europe-image-contrast))
+    saturate(var(--europe-image-saturate))
+    sepia(var(--europe-image-sepia));
+
+  box-shadow:
+    0 22px 48px rgba(91, 66, 43, 0.17),
+    0 4px 14px rgba(91, 66, 43, 0.08);
+
+  transition:
+    box-shadow 0.6s ease,
+    border-color 0.5s ease,
+    filter 0.5s ease;
+}
+
+/* 主照片 */
+
+.europe-region .region-slide.is-active .region-image {
+  border-color: #fffaf1;
+
+  box-shadow:
+    0 28px 60px rgba(91, 66, 43, 0.22),
+    0 0 0 1px rgba(178, 138, 85, 0.28);
+}
+
+/* 左右預覽照片 */
+
+.europe-region .region-slide.is-prev .region-image,
+.europe-region .region-slide.is-next .region-image {
+  filter:
+    brightness(var(--europe-image-brightness))
+    contrast(var(--europe-image-contrast))
+    saturate(var(--europe-image-saturate))
+    sepia(var(--europe-image-sepia));
+}
+
+/* ========================================
+   文字內容
+======================================== */
+
+.europe-region .region-copy {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+
+  color: var(--europe-text);
+  font-family: var(--europe-font-zh);
+  background: transparent;
+  padding: 0;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateX(20px);
+
+  transition:
+    opacity 0.5s ease 0.15s,
+    transform 0.5s ease 0.15s,
+    visibility 0s linear 0.5s;
+}
+
+/* 主卡片顯示文字 */
+
+.europe-region .region-slide.is-active .region-copy {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+
+  transition:
+    opacity 0.5s ease 0.15s,
+    transform 0.5s ease 0.15s,
+    visibility 0s;
+}
+
+/* 預覽卡片隱藏文字 */
+
+.europe-region .region-slide.is-prev .region-copy,
+.europe-region .region-slide.is-next .region-copy {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ========================================
+   英文眉標
+======================================== */
+
+.europe-region .region-copy > span {
+  display: block;
+  margin: 0 0 14px;
+
+  color: #a77a43;
+  font-family: var(--europe-font-en);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+/* ========================================
+   中文主標題
+======================================== */
+
+.europe-region .region-copy h2 {
+  margin: 0 0 12px;
+  padding: 0;
+
+  color: #493629;
+  font-family: var(--serif);
+  font-size: clamp(36px, 3.6vw, 52px);
+  font-weight: 600;
+  font-size: 34px;
+  letter-spacing: 0.075em;
+  line-height: 1.45;
+
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+/* ========================================
+   英文副標
+======================================== */
+
+.europe-region .region-copy .region-en {
+  margin: 0 0 24px;
+
+  color: #a17b51;
+  font-family: var(--europe-font-en);
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  line-height: 1.65;
+}
+
+/* ========================================
+   金色分隔線
+======================================== */
+
+.europe-region .region-copy .thin-line {
+  width: 55px;
+  height: 1px;
+  margin: 0 0 22px;
+
+  background: #b28a55;
+  opacity: 0.95;
+
+  transition: width 0.45s ease;
+}
+
+.europe-region .region-slide.is-active .thin-line {
+  width: 80px;
+}
+
+/* ========================================
+   中文介紹
+======================================== */
+
+.europe-region .region-copy > p:last-child {
+  max-width: 460px;
+  margin: 0;
+
+  color: #766454;
+  font-family: var(--europe-font-zh);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  line-height: 2;
+  width: 70%;
+
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   左右箭頭｜桌機移至主照片右側
+======================================== */
+
+.europe-region .region-arrows {
+  position: absolute;
+  z-index: 30;
+
+  top: 210px;
+  left: calc(50% + 470px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+
+  width: auto;
+  margin: 0;
+  padding: 0;
+
+  transform: none;
+}
+
+/* 膠囊箭頭按鈕 */
+
+.europe-region .region-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 65px;
+  height: 30px;
+  padding: 0 0 5px;
+
+  border: 1px solid rgba(142, 117, 84, 0.55);
+  border-radius: 20px;
+
+  background: transparent;
+  color: var(--europe-gold);
+
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+  box-shadow: none;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* 左邊上一張｜維持透明背景 */
+
+.europe-region .region-prev {
+  background: transparent;
+}
+
+/* 右邊下一張｜加入奶油米白背景 */
+
+.europe-region .region-next {
+  background: #f5eee3;
+}
+
+/* 箭頭滑過效果 */
+
+.europe-region .region-arrow:hover {
+  background: var(--europe-gold);
+  color: #fffaf1;
+  border-color: var(--europe-gold);
+  box-shadow: none;
+}
+
+/* 上一張 */
+
+.europe-region .region-prev:hover {
+  transform: translateX(-2px);
+}
+
+/* 下一張 */
+
+.europe-region .region-next:hover {
+  transform: translateX(2px);
+}
+
+/* ========================================
+   輪播圓點
+======================================== */
+
+.europe-region .region-dots {
+  position: relative;
+  z-index: 20;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  margin: 18px auto 0;
+}
+
+.europe-region .region-dots button {
+  display: block;
+
+  width: 7px;
+  height: 7px;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(126, 96, 65, 0.28);
+  cursor: pointer;
+
+  transition:
+    width 0.35s ease,
+    background-color 0.35s ease;
+}
+
+.europe-region .region-dots button.is-active,
+.europe-region .region-dots button.active {
+  width: 24px;
+  border-radius: 5px;
+  background: #b28a55;
+}
+
+/* ========================================
+   中型桌機｜箭頭避免超出輪播範圍
+======================================== */
+
+@media (max-width: 1400px) and (min-width: 992px) {
+  .europe-region .region-arrows {
+    left: auto;
+    right: 10%;
+  }
+}
+
+@media (max-width: 1399px) {
+  .section-w {
+    width: calc(100% - 48px);
+    max-width: 1050px;  
+    box-sizing: border-box;
+  }
+
+  /* .section-heading,
+  .classic-heading {
+    transform: translate(20px, 0);
+  } */
+}
+
+/* ========================================
+   平板版
+======================================== */
+
+@media (max-width: 991px) {
+  .europe-region {
+    padding: 65px 0 55px;
+  }
+
+  .europe-region .region-track {
+    height: 540px;
+  }
+
+  .europe-region .region-slide {
+    width: 90%;
+    height: 500px;
+
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* 平板隱藏左右預覽卡片 */
+
+  .europe-region .region-slide.is-prev,
+  .europe-region .region-slide.is-next {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: scale(0.8) translateZ(-200px);
+  }
+
+  .europe-region .region-image {
+    width: 100%;
+    max-width: 620px;
+    height: 300px;
+    flex: 0 0 auto;
+  }
+
+  .europe-region .region-copy {
+    width: 90%;
+    flex: 0 0 auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .europe-region .region-copy > span {
+    font-size: 14px;
+  }
+
+  .europe-region .region-copy h2 {
+    font-size: clamp(30px, 4.5vw, 42px);
+    letter-spacing: 0.07em;
+    margin: 0;
+  }
+
+  .europe-region .region-copy .region-en {
+    font-size: 19px;
+    margin-bottom: 16px;
+  }
+
+  .europe-region .region-copy .thin-line {
+    margin: 0 auto 16px;
+  }
+
+  .europe-region .region-copy > p:last-child {
+    max-width: 520px;
+    font-size: 16px;
+    line-height: 1.9;
+  }
+
+  /* 平板箭頭回到照片下方 */
+
+  .europe-region .region-arrows {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+
+    width: 100%;
+    margin: 22px auto 0;
+    transform: none;
+  }
+
+
+  .section-heading,
+  .classic-heading {
+    transform: translate(20px, 15px);
+  }
+}
+
+
+/* ========================================
+   手機版
+======================================== */
+
+@media (max-width: 575px) {
+  .europe-region {
+    padding: 48px 0 42px;
+  }
+
+  .europe-region .region-track {
+    height: 460px;
+  }
+
+  .europe-region .region-slide {
+    width: 92%;
+    height: 430px;
+    gap: 20px;
+  }
+
+  .europe-region .region-image {
+    width: 100%;
+    max-width: none;
+    height: 230px;
+    border-width: 4px;
+  }
+
+  .europe-region .region-copy {
+    width: 100%;
+  }
+
+  .europe-region .region-copy > span {
+    margin-bottom: 8px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+  }
+
+  .europe-region .region-copy h2 {
+    margin-bottom: 4px;
+    font-size: 30px;
+    letter-spacing: 0.055em;
+    line-height: 1.4;
+  }
+
+  .europe-region .region-copy .region-en {
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .europe-region .region-copy .thin-line {
+    margin-bottom: 12px;
+  }
+
+  .europe-region .region-copy > p:last-child {
+    font-size: 16px;
+    letter-spacing: 0.025em;
+    line-height: 1.8;
+    width: 80%;
+  }
+
+  .europe-region .region-arrow {
+    width: 65px;
+    height: 33px;
+    font-size: 24px;
+  }
+
+  .europe-region .region-dots {
+    margin-top: 25px;
+  }
+
+  .europe-region .region-arrows {
+    margin-top: 25px;
+  }
+
+  .section-w {
+    width: calc(100% - 10px);
+  }
+
+  .section-heading h2,
+  .classic-heading h2 {
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    line-height: 1.8;
+    white-space: nowrap;
+  }
+}
+
+
+/* =========================================================
+   歐洲經典行程、紐澳經典行程｜輪播點點
+========================================================= */
+
+#europeClassicDots,
+#oceaniaClassicDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin: 28px auto 0;
+  min-height: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+/* 點點按鈕 */
+#europeClassicDots .classic-dot,
+#oceaniaClassicDots .classic-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #d8cbb9;
+  opacity: 1;
+  cursor: pointer;
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+/* 目前所在頁 */
+#europeClassicDots .classic-dot.is-active,
+#oceaniaClassicDots .classic-dot.is-active {
+  width: 24px;
+  height: 7px;
+  border-radius: 10px;
+  background: #9c8366;
+}
+
+/* 滑鼠移入 */
+#europeClassicDots .classic-dot:hover,
+#oceaniaClassicDots .classic-dot:hover {
+  background: #9c8366;
+}
+
+/* 平板 */
+@media (max-width: 991px) {
+  #europeClassicDots,
+  #oceaniaClassicDots {
+    margin-top: 24px;
+    gap: 8px;
+  }
+}
+
+/* 手機 */
+@media (max-width: 575px) {
+  #europeClassicDots,
+  #oceaniaClassicDots {
+    margin-top: 20px;
+    gap: 7px;
+  }
+
+  #europeClassicDots .classic-dot,
+  #oceaniaClassicDots .classic-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  #europeClassicDots .classic-dot.is-active,
+  #oceaniaClassicDots .classic-dot.is-active {
+    width: 20px;
+    height: 6px;
+  }
+}
+
+
+
+/* 紐澳 */
+/* ========================================
+   紐澳｜New Zealand & Australia
+   奶油米白 × 燕麥色 × 焦糖霧金
+   滿版 3D Coverflow
+======================================== */
+
+.oceania-region,
+.oceania-region * {
+  box-sizing: border-box;
+}
+
+.oceania-region {
+  --oceania-bg: #f5eee3;
+  --oceania-gold: #b28a55;
+  --oceania-text: #493629;
+  --oceania-muted: rgba(73, 54, 41, 0.82);
+
+  --oceania-font-zh:
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
+
+  --oceania-font-en:
+    "Cormorant Garamond",
+    "Georgia",
+    "Times New Roman",
+    serif;
+
+  --oceania-image-brightness: 1.06;
+  --oceania-image-contrast: 0.98;
+  --oceania-image-saturate: 0.92;
+  --oceania-image-sepia: 0.06;
+
+  position: relative;
+  isolation: isolate;
+  width: 100vw;
+  max-width: 100%;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 85px 0 70px;
+  overflow: hidden;
+
+  color: var(--oceania-text);
+  font-family: var(--oceania-font-zh);
+
+  background:
+    radial-gradient(
+      ellipse at 18% 18%,
+      rgba(255, 252, 244, 0.96) 0%,
+      rgba(247, 239, 225, 0.55) 38%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse at 85% 78%,
+      rgba(190, 158, 119, 0.20) 0%,
+      transparent 48%
+    ),
+    linear-gradient(
+      135deg,
+      #f5eee3 0%,
+      #e9dcc9 48%,
+      #f3e9da 100%
+    );
+}
+
+/* ========================================
+   背景裝飾
+======================================== */
+
+.oceania-region::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 15%,
+      rgba(255, 255, 255, 0.30) 50%,
+      transparent 85%
+    );
+}
+
+/* ========================================
+   滿版內容容器
+======================================== */
+
+.oceania-region .section-inner {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ========================================
+   輪播容器
+======================================== */
+
+.oceania-region .region-slider {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+/* ========================================
+   3D 軌道
+======================================== */
+
+.oceania-region .region-track {
+  position: relative;
+  width: 100%;
+  height: 500px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  perspective: 1600px;
+  will-change: transform;
+}
+
+/* ========================================
+   輪播卡片
+======================================== */
+
+.oceania-region .region-slide {
+  position: absolute;
+
+  width: min(1180px, 88vw);
+  max-width: none;
+  height: 450px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(36px, 4vw, 76px);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease,
+    visibility 0s linear 0.7s;
+}
+
+/* ========================================
+   左側預覽卡片
+======================================== */
+
+.oceania-region .region-slide.is-prev {
+  opacity: 0.78;
+  visibility: visible;
+
+  transform:
+    translateX(-78%)
+    translateZ(-180px)
+    rotateY(16deg)
+    scale(0.86);
+
+  transform-origin: center center;
+  filter: none;
+  z-index: 1;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+/* ========================================
+   右側預覽卡片
+======================================== */
+
+.oceania-region .region-slide.is-next {
+  opacity: 0.78;
+  visibility: visible;
+
+  transform:
+    translateX(78%)
+    translateZ(-180px)
+    rotateY(-16deg)
+    scale(0.86);
+
+  transform-origin: center center;
+  filter: none;
+  z-index: 1;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+/* ========================================
+   中間主卡片
+======================================== */
+
+.oceania-region .region-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translateX(0)
+    translateZ(0)
+    rotateY(0deg)
+    scale(1);
+
+  transform-origin: center center;
+  pointer-events: auto;
+  filter: none;
+  z-index: 10;
+
+  transition:
+    transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.7s ease,
+    filter 0.7s ease;
+}
+
+/* ========================================
+   照片
+======================================== */
+
+.oceania-region .region-image {
+  position: relative;
+  flex: 0 0 52%;
+  height: 420px;
+  min-width: 0;
+
+  overflow: hidden;
+  border-radius: 2px;
+  border: 5px solid rgba(255, 250, 241, 0.96);
+
+  background-color: #d8c5ad;
+  background-image: var(--bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  filter:
+    brightness(var(--oceania-image-brightness))
+    contrast(var(--oceania-image-contrast))
+    saturate(var(--oceania-image-saturate))
+    sepia(var(--oceania-image-sepia));
+
+  box-shadow:
+    0 22px 48px rgba(91, 66, 43, 0.17),
+    0 4px 14px rgba(91, 66, 43, 0.08);
+
+  transition:
+    box-shadow 0.6s ease,
+    border-color 0.5s ease,
+    filter 0.5s ease;
+}
+
+/* 主照片 */
+
+.oceania-region .region-slide.is-active .region-image {
+  border-color: #fffaf1;
+
+  box-shadow:
+    0 28px 60px rgba(91, 66, 43, 0.22),
+    0 0 0 1px rgba(178, 138, 85, 0.28);
+}
+
+/* 左右預覽照片 */
+
+.oceania-region .region-slide.is-prev .region-image,
+.oceania-region .region-slide.is-next .region-image {
+  filter:
+    brightness(var(--oceania-image-brightness))
+    contrast(var(--oceania-image-contrast))
+    saturate(var(--oceania-image-saturate))
+    sepia(var(--oceania-image-sepia));
+}
+
+/* ========================================
+   文字內容
+======================================== */
+
+.oceania-region .region-copy {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+
+  color: var(--oceania-text);
+  font-family: var(--oceania-font-zh);
+  background: transparent;
+  padding: 0;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateX(20px);
+
+  transition:
+    opacity 0.5s ease 0.15s,
+    transform 0.5s ease 0.15s,
+    visibility 0s linear 0.5s;
+}
+
+/* 主卡片顯示文字 */
+
+.oceania-region .region-slide.is-active .region-copy {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+
+  transition:
+    opacity 0.5s ease 0.15s,
+    transform 0.5s ease 0.15s,
+    visibility 0s;
+}
+
+/* 預覽卡片隱藏文字 */
+
+.oceania-region .region-slide.is-prev .region-copy,
+.oceania-region .region-slide.is-next .region-copy {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ========================================
+   英文眉標
+======================================== */
+
+.oceania-region .region-copy > span {
+  display: block;
+  margin: 0 0 14px;
+
+  color: #a77a43;
+  font-family: var(--oceania-font-en);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+/* ========================================
+   中文主標題
+======================================== */
+
+.oceania-region .region-copy h2 {
+  margin: 0 0 12px;
+  padding: 0;
+  color: #493629;
+  font-family: var(--serif);
+  font-size: clamp(36px, 3.6vw, 52px);
+  font-weight: 600;
+  font-size: 34px;
+  letter-spacing: 0.075em;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+/* ========================================
+   英文副標
+======================================== */
+
+.oceania-region .region-copy .region-en {
+  margin: 0 0 24px;
+
+  color: #a17b51;
+  font-family: var(--oceania-font-en);
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  line-height: 1.65;
+}
+
+/* ========================================
+   金色分隔線
+======================================== */
+
+.oceania-region .region-copy .thin-line {
+  width: 55px;
+  height: 1px;
+  margin: 0 0 22px;
+
+  background: var(--oceania-gold);
+  opacity: 0.95;
+
+  transition: width 0.45s ease;
+}
+
+.oceania-region .region-slide.is-active .thin-line {
+  width: 80px;
+}
+
+/* ========================================
+   中文介紹
+======================================== */
+
+.oceania-region .region-copy > p:last-child {
+  width: 70%;
+  max-width: 460px;
+  margin: 0;
+
+  color: #766454;
+  font-family: var(--oceania-font-zh);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.045em;
+  line-height: 2;
+
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   左右箭頭｜桌機移至主照片右側
+======================================== */
+
+.oceania-region .region-arrows {
+  position: absolute;
+  z-index: 30;
+
+  top: 210px;
+  left: calc(50% + 470px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+
+  width: auto;
+  margin: 0;
+  padding: 0;
+
+  transform: none;
+}
+
+/* 膠囊箭頭按鈕 */
+
+.oceania-region .region-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 65px;
+  height: 30px;
+  padding: 0 0 5px;
+
+  border: 1px solid rgba(142, 117, 84, 0.55);
+  border-radius: 20px;
+
+  background: transparent;
+  color: var(--oceania-gold);
+
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+  box-shadow: none;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* 上一張 */
+
+.oceania-region .region-prev {
+  background: transparent;
+}
+
+/* 下一張 */
+
+.oceania-region .region-next {
+  background: #f5eee3;
+}
+
+/* 箭頭滑過效果 */
+
+.oceania-region .region-arrow:hover {
+  background: var(--oceania-gold);
+  color: #fffaf1;
+  border-color: var(--oceania-gold);
+  box-shadow: none;
+}
+
+.oceania-region .region-prev:hover {
+  transform: translateX(-2px);
+}
+
+.oceania-region .region-next:hover {
+  transform: translateX(2px);
+}
+
+/* ========================================
+   輪播圓點
+======================================== */
+
+.oceania-region .region-dots {
+  position: relative;
+  z-index: 20;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  margin: 18px auto 0;
+}
+
+.oceania-region .region-dots button {
+  display: block;
+
+  width: 7px;
+  height: 7px;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(126, 96, 65, 0.28);
+  cursor: pointer;
+
+  transition:
+    width 0.35s ease,
+    background-color 0.35s ease;
+}
+
+.oceania-region .region-dots button.is-active,
+.oceania-region .region-dots button.active {
+  width: 24px;
+  border-radius: 5px;
+  background: var(--oceania-gold);
+}
+
+/* ========================================
+   中型桌機｜箭頭避免超出輪播範圍
+======================================== */
+
+@media (max-width: 1400px) and (min-width: 992px) {
+  .oceania-region .region-arrows {
+    left: auto;
+    right: 10%;
+  }
+}
+
+/* ========================================
+   平板版
+======================================== */
+
+@media (max-width: 991px) {
+  .oceania-region {
+    padding: 65px 0 55px;
+  }
+
+  .oceania-region .region-track {
+    height: 540px;
+  }
+
+  .oceania-region .region-slide {
+    width: 90%;
+    height: 500px;
+
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* 平板隱藏左右預覽卡片 */
+
+  .oceania-region .region-slide.is-prev,
+  .oceania-region .region-slide.is-next {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: scale(0.8) translateZ(-200px);
+  }
+
+  .oceania-region .region-image {
+    width: 100%;
+    max-width: 620px;
+    height: 300px;
+    flex: 0 0 auto;
+  }
+
+  .oceania-region .region-copy {
+    width: 90%;
+    flex: 0 0 auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .oceania-region .region-copy > span {
+    font-size: 14px;
+  }
+
+  .oceania-region .region-copy h2 {
+    font-size: clamp(30px, 4.5vw, 42px);
+    letter-spacing: 0.07em;
+  }
+
+  .oceania-region .region-copy .region-en {
+    font-size: 19px;
+    margin-bottom: 16px;
+  }
+
+  .oceania-region .region-copy .thin-line {
+    margin: 0 auto 16px;
+  }
+
+  .oceania-region .region-copy > p:last-child {
+    width: 100%;
+    max-width: 520px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  /* 平板箭頭回到照片下方 */
+
+  .oceania-region .region-arrows {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+
+    width: 100%;
+    margin: 22px auto 0;
+    transform: none;
+  }
+}
+
+/* ========================================
+   手機版
+======================================== */
+
+@media (max-width: 575px) {
+  .oceania-region {
+    padding: 48px 0 42px;
+  }
+
+  .oceania-region .region-track {
+    height: 460px;
+  }
+
+  .oceania-region .region-slide {
+    width: 92%;
+    height: 430px;
+    gap: 20px;
+  }
+
+  .oceania-region .region-image {
+    width: 100%;
+    max-width: none;
+    height: 230px;
+    border-width: 4px;
+  }
+
+  .oceania-region .region-copy {
+    width: 100%;
+  }
+
+  .oceania-region .region-copy > span {
+    margin-bottom: 8px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+  }
+
+  .oceania-region .region-copy h2 {
+    margin-bottom: 8px;
+    font-size: 29px;
+    letter-spacing: 0.055em;
+    line-height: 1.4;
+  }
+
+  .oceania-region .region-copy .region-en {
+    margin-bottom: 12px;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .oceania-region .region-copy .thin-line {
+    margin-bottom: 12px;
+  }
+
+  .oceania-region .region-copy > p:last-child {
+    width: 100%;
+    font-size: 16px;
+    letter-spacing: 0.025em;
+    line-height: 1.8;
+    padding-bottom: 10px;
+    width: 80%;
+  }
+
+  .oceania-region .region-arrow {
+    width: 65px;
+    height: 33px;
+    font-size: 24px;
+  }
+
+  .oceania-region .region-dots {
+    margin-top: 25px;
+  }
+
+  .oceania-region .region-arrows {
+    margin-top: 25px;
+  }
+}
+
+
+
+/* =========================================================
+   8. 經典行程 (Classic Tours Section)
+   ========================================================= */
+
+.classic-section {
+  position: relative;
+  width: 100%;
+  padding: 100px 0 120px;
+  background: #fffdf9;
+  overflow: hidden;
+}
+
+.oceania-classic-section {
+  background:
+    radial-gradient(ellipse at 8% 12%, rgba(223,201,163,.14), transparent 36%),
+    linear-gradient(135deg, #f8f0e6 0%, #fdf9f2 58%, #f1e5d9 100%);
+}
+
+.classic-section .section-inner {
+  width: min(1260px, calc(100% - 88px));
+  margin: 0 auto;
+}
+
+
+/* ========================================
+   區塊標題
+======================================== */
+
+.classic-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  margin: 0;
+}
+
+.classic-heading h2 {
+  margin: 0;
+  color: var(--lux-brown);
+  font-family: var(--serif);
+  font-size: clamp(26px, 2.3vw, 32px);
+  font-weight: 500;
+  letter-spacing: .13em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.classic-heading h2::after {
+  content: "";
+  display: block;
+  width: 62px;
+  height: 1px;
+  margin-top: 11px;
+  background: linear-gradient(
+    90deg,
+    var(--lux-gold),
+    rgba(184,154,106,.08)
+  );
+}
+
+/* ========================================
+   分類篩選按鈕
+======================================== */
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(12px, 1.5vw, 20px);
+  margin-left: auto;
+}
+
+.filter-btn {
+  position: relative;
+  flex: 0 0 auto;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 7px 2px 8px;
+  background: transparent;
+  color: #8a7a6c;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: .07em;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease;
+}
+
+.filter-btn:hover {
+  color: #a58b66;
+}
+
+.filter-btn.is-active {
+  color: #493b30;
+  border-bottom-color: var(--lux-gold);
+}
+
+/* ========================================
+   輪播箭頭
+======================================== */
+
+.classic-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  gap: 10px;
+}
+
+/* ========================================
+   輪播視窗
+======================================== */
+
+.classic-viewport {
+  position: relative;
+  width: 100%;
+  margin-top: 32px;
+  overflow-x: clip;
+  overflow-y: visible;
+  touch-action: pan-y;
+}
+
+/* ========================================
+   輪播軌道
+   保留原本輪播定位方式
+======================================== */
+
+.classic-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  width: 100%;
+  transform: translate3d(0, 0, 0);
+  transition: transform .55s cubic-bezier(.2, .75, .25, 1);
+  will-change: transform;
+}
+
+/* ========================================
+   卡片本體
+======================================== */
+
+.classic-card,
+.trip-card {
+  position: relative;
+  display: flex;
+  align-self: flex-start;
+  flex: 0 0 calc((100% - 44px) / 3);
+  flex-direction: column;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(184,154,106,.32);
+  background: linear-gradient(180deg, #fffefa 0%, #fbf5ec 100%);
+  box-shadow: 0 12px 30px rgba(68,53,40,.075);
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease,
+    border-color .35s ease;
+}
+
+.classic-card:hover,
+.trip-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(168,133,86,.68);
+  box-shadow: 0 20px 42px rgba(68,53,40,.14);
+}
+
+/* ========================================
+   圖片容器
+   統一高度 240px
+======================================== */
+
+.classic-card .classic-photo,
+.classic-card .classic-image,
+.classic-card .classic-card-image,
+.classic-card .trip-photo,
+.trip-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 240px;
+  min-height: 240px;
+  max-height: 240px;
+  flex: 0 0 240px;
+  overflow: hidden;
+  background-color: #e8d9c8;
+}
+
+/* 統一圖片尺寸與裁切 */
+.classic-card img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  min-height: 240px;
+  max-height: 240px;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform .65s cubic-bezier(.2, .75, .25, 1);
+}
+
+/* 滑鼠移入效果 */
+.classic-card:hover img {
+  transform: scale(1.045);
+}
+
+/* ========================================
+   卡片內文
+   固定高度 300px（包含 padding）
+======================================== */
+
+.classic-card .classic-body,
+.classic-card .classic-content,
+.classic-card .classic-card-body {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 20px 20px 22px;
+}
+
+/* ========================================
+   行程標籤
+======================================== */
+
+.classic-card .classic-tag,
+.classic-card .classic-kicker,
+.classic-card .trip-tag {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--gold-dark, #a58b66);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: .16em;
+  line-height: 1.7;
+}
+
+/* ========================================
+   行程標題
+   固定三行空間，最多顯示三行
+======================================== */
+
+.classic-card h3,
+.classic-card .classic-title,
+.classic-card .trip-title {
+  margin: 4px 0 0;
+  color: var(--ink, #4b4038);
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: .07em;
+  line-height: 1.55;
+  text-align: justify;
+
+  height: calc(20px * 1.55 * 3);
+  flex: 0 0 calc(20px * 1.55 * 3);
+  box-sizing: border-box;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   一般描述
+======================================== */
+
+.classic-card p,
+.classic-card .classic-desc {
+  margin: 0 0 8px;
+  color: #776b61;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .1rem;
+  text-align: justify;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   描述統一兩行高度
+======================================== */
+
+.classic-card .classic-desc {
+  margin: 0 0 15px;
+  height: 3em;
+  flex: 0 0 3em;
+  line-height: 1.5em;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   行程資訊
+======================================== */
+
+.classic-card .classic-meta {
+  margin-top: 4px;
+  color: #8a7d72;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: .07em;
+  line-height: 1.8;
+}
+
+/* ========================================
+   了解更多按鈕
+======================================== */
+
+.classic-card .trip-toggle,
+.trip-card .trip-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  border: 0;
+  border-top: 1px solid rgba(179,154,117,.28);
+  padding: 13px 0 0;
+  background: transparent;
+  color: var(--gold-dark, #a58b66);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: .12em;
+  line-height: 1.6;
+  text-align: left;
+  transition: color .25s ease;
+}
+
+.classic-card .trip-toggle:hover,
+.trip-card .trip-toggle:hover {
+  color: #806849;
+}
+
+.classic-card .trip-toggle .plus,
+.trip-card .trip-toggle .plus {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform .3s ease;
+}
+
+.classic-card.is-open .trip-toggle .plus,
+.trip-card.is-open .trip-toggle .plus {
+  transform: rotate(45deg);
+}
+
+/* ========================================
+   展開內容
+======================================== */
+
+.classic-card .trip-more,
+.trip-card .trip-more {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    height .38s cubic-bezier(.22, .61, .36, 1),
+    opacity .25s ease;
+  will-change: height;
+}
+
+.classic-card.is-open .trip-more,
+.trip-card.is-open .trip-more {
+  opacity: 1;
+}
+
+.classic-card .trip-more-inner,
+.trip-card .trip-more-inner {
+  display: flow-root;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 展開文字 */
+
+.classic-card .trip-more p,
+.trip-card .trip-more p {
+  margin: 0;
+  padding: 5px 0 0;
+  color: #74685e;
+  font-size: 14px;
+  line-height: 1.95;
+  overflow-wrap: anywhere;
+}
+
+/* 歐洲原本的 .classic-more 段落 */
+.classic-card .trip-more .classic-more {
+  margin: 0;
+  padding: 5px 0 0;
+  color: #74685e;
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+
+.classic-card .trip-more ul,
+.trip-card .trip-more ul {
+  margin: 0;
+  padding: 0 0 18px 17px;
+  color: #74685e;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.classic-card .trip-more li,
+.trip-card .trip-more li {
+  margin: 0 0 4px;
+}
+
+.classic-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.classic-card-link:hover,
+.classic-card-link:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 行程介紹：移除底部內距 */
+.classic-card-link .classic-content {
+  padding-bottom: 0;
+}
+
+/* 推薦行程：移除頂部內距，保留底部內距 */
+.classic-card > .classic-content {
+  padding-top: 0;
+  padding-bottom: 24px;
+}
+
+@media (max-width: 1200px) {
+  .classic-heading {
+    width: 97%;
+  }
+}
+
+/* ========================================
+   平板版
+======================================== */
+
+@media (max-width: 1000px) {
+  .classic-section {
+    padding: 78px 0 90px;
+  }
+
+  .classic-section .section-inner {
+    width: calc(100% - 56px);
+  }
+
+  .classic-card,
+  .trip-card {
+    flex: 0 0 calc((100% - 20px) / 2);
+  }
+}
+
+/* ========================================
+   手機版
+======================================== */
+
+@media (max-width: 720px) {
+  .classic-section {
+    padding: 58px 0 70px;
+  }
+
+  .classic-section .section-inner {
+    width: calc(100% - 36px);
+  }
+
+  .classic-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 18px 12px;
+    width: 95%;
+  }
+
+  .classic-heading > div:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .filter-group {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: 18px;
+    width: 100%;
+    margin: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .classic-arrows {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: end;
+  }
+
+  .classic-card,
+  .trip-card {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
+  .classic-card:hover,
+  .trip-card:hover,
+  .classic-card:hover img {
+    transform: none;
+  }
+}
+
+
+
+/* =========================================================
+   9. 裝飾與頁尾 (Decorations & Footer)
+   ========================================================= */
+.decorate-visual {
+  position: relative;
+  min-height: 350px;
+  overflow: hidden;
+}
+
+.decorate-visual-image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(35,25,16,.10), rgba(35,25,16,.02)),
+    url("../images/ar-ul/bg-1.jpg") center / cover no-repeat;
+}
+
+.decorate-visual-copy {
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(0,0,0,.28);
+  text-align: right;
+}
+
+.decorate-visual-copy span {
+  display: block;
+  font-family: var(--serif);
+  font-size: 10px;
+  letter-spacing: .32em;
+}
+
+.decorate-visual-copy strong {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--serif);
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 400;
+  letter-spacing: .10em;
+}
+
+.site-decorate {
+  background: #40372f;
+  color: #eee5dc;
+  text-align: center;
+  padding: 28px 20px;
+  font-family: var(--serif);
+  letter-spacing: .13em;
+  font-size: 11px;
+}
+
+.site-decorate p {
+  margin: 3px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    transition-duration: .01ms !important;
+  }
+}
+
+
+/* =========================================================
+   歐洲經典行程、紐澳經典行程｜輪播點點
+   對應 HTML：
+   #europeClassicDots
+   #oceaniaClassicDots
+
+   保留原有樣式，只新增點點外觀
+========================================================= */
+
+#europeClassicDots,
+#oceaniaClassicDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  width: 100%;
+  min-height: 12px;
+  margin: 28px auto 0;
+  position: relative;
+  z-index: 2;
+}
+
+#europeClassicDots .classic-dot,
+#oceaniaClassicDots .classic-dot {
+  display: block;
+  flex: 0 0 7px;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #d8cbb9;
+  opacity: 1;
+  cursor: pointer;
+  transition:
+    width 0.3s ease,
+    flex-basis 0.3s ease,
+    background-color 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+/* 目前所在的行程：金棕色長點 */
+#europeClassicDots .classic-dot.is-active,
+#oceaniaClassicDots .classic-dot.is-active {
+  flex-basis: 24px;
+  width: 24px;
+  height: 7px;
+  border-radius: 10px;
+  background: #9c8366;
+}
+
+/* 滑鼠移入 */
+#europeClassicDots .classic-dot:hover,
+#oceaniaClassicDots .classic-dot:hover {
+  background: #9c8366;
+}
+
+/* 鍵盤操作焦點 */
+#europeClassicDots .classic-dot:focus-visible,
+#oceaniaClassicDots .classic-dot:focus-visible {
+  outline: 2px solid #9c8366;
+  outline-offset: 4px;
+}
+
+/* 平板 */
+@media (max-width: 991px) {
+  #europeClassicDots,
+  #oceaniaClassicDots {
+    margin-top: 24px;
+    gap: 8px;
+  }
+}
+
+/* 手機 */
+@media (max-width: 575px) {
+  #europeClassicDots,
+  #oceaniaClassicDots {
+    margin-top: 20px;
+    gap: 7px;
+  }
+
+  #europeClassicDots .classic-dot,
+  #oceaniaClassicDots .classic-dot {
+    flex-basis: 6px;
+    width: 6px;
+    height: 6px;
+  }
+
+  #europeClassicDots .classic-dot.is-active,
+  #oceaniaClassicDots .classic-dot.is-active {
+    flex-basis: 20px;
+    width: 20px;
+    height: 6px;
+  }
+}
