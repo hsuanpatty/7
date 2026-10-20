@@ -1654,7 +1654,7 @@ header .container {
       #f3e9da 100%
     ); */
 
-    background: radial-gradient(ellipse at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.55) 38%, transparent 70%), radial-gradient(ellipse at 85% 78%, rgba(190, 158, 119, 0.20) 0%, transparent 48%), linear-gradient(135deg, #f5eee3 0%, #a28c6d 48%, #f3e9da 100%);
+    background: radial-gradient(ellipse at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.55) 38%, transparent 70%), radial-gradient(ellipse at 85% 78%, rgba(190, 158, 119, 0.20) 0%, transparent 48%), linear-gradient(135deg, #f5eee3 0%, #f1d9b7 48%, #f3e9da 100%);
 }
 
 
