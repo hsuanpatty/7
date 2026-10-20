@@ -1,4 +1,3 @@
-
 (() => {
   "use strict";
 
@@ -8,7 +7,7 @@
      1. Header 捲動效果
      2. 手機選單
      3. Reveal 淡入動畫
-     4. 精選旅程：無限循環＋中央定位＋圓點＋觸控
+     4. 精選旅程：無限循環＋自動輪播＋中央定位＋圓點＋觸控
      5. 歐洲／紐澳區域圖片輪播
      6. 歐洲經典行程：直接讀取 HTML
      7. 紐澳經典行程：直接讀取 HTML
@@ -186,596 +185,730 @@
 
 
   /* =========================================================
-     4. 精選旅程｜無限循環輪播
-     切換時由 CSS 控制卡片平順放大／縮小
+     4. 精選旅程輪播
+     1. 無限循環
+     2. 每 5 秒自動切換
+     3. 中央卡片定位
+     4. 左右箭頭與圓點切換
+     5. 手機觸控滑動
+     6. 滑鼠移入暫停，移出繼續
+     7. 切換時維持平順放大效果
   ========================================================= */
 
-  const featuredRoot = $("#featuredSlider");
+  function setupFeaturedSlider() {
+    const root = document.getElementById("featuredSlider");
+    if (!root) return null;
 
-  const featured = {
-    root: featuredRoot,
-    track: featuredRoot
-      ? $(".featured-track", featuredRoot)
-      : null,
-    items: featuredRoot
-      ? $$(".featured-track > .featured-item", featuredRoot)
-      : [],
-    renderedItems: [],
-    index: 0,
-    position: 0,
-    dots: $('[data-dots-for="featuredSlider"]'),
-    initialized: false
-  };
+    const track = root.querySelector(".featured-track");
 
-  const featuredControls = $(
-    '[data-slider-controls="featuredSlider"]'
-  );
-
-  const featuredPrev = featuredControls
-    ? $(".prev", featuredControls)
-    : null;
-
-  const featuredNext = featuredControls
-    ? $(".next", featuredControls)
-    : null;
-
-
-  function setupFeaturedInfinite() {
-    const { track, items } = featured;
-
-    if (!track || !items.length || featured.initialized) return;
-
-    const originalItems = items.slice();
-    const total = originalItems.length;
-
-    const previousSet = originalItems.map(item =>
-      item.cloneNode(true)
+    const dotsBox = document.querySelector(
+      '[data-dots-for="featuredSlider"]'
     );
 
-    const middleSet = originalItems.map(item =>
-      item.cloneNode(true)
+    const controls = document.querySelector(
+      '[data-slider-controls="featuredSlider"]'
     );
 
-    const nextSet = originalItems.map(item =>
-      item.cloneNode(true)
+    const prevBtn = controls?.querySelector(".prev");
+    const nextBtn = controls?.querySelector(".next");
+
+    if (!track || !prevBtn || !nextBtn) {
+      console.warn(
+        "精選旅程：請確認 #featuredSlider、.featured-track 與左右按鈕。"
+      );
+      return null;
+    }
+
+    // 避免同一個輪播重複初始化
+    if (root.dataset.featuredInitialized === "true") {
+      return null;
+    }
+
+    const originals = Array.from(track.children).filter(item =>
+      item.classList.contains("featured-item")
     );
 
-    track.innerHTML = "";
+    const total = originals.length;
 
-    [
-      ...previousSet,
-      ...middleSet,
-      ...nextSet
-    ].forEach(item => {
-      item.classList.remove("is-active");
-      item.removeAttribute("aria-current");
-      track.appendChild(item);
-    });
+    if (!total) return null;
 
-    featured.renderedItems = [...track.children];
+    root.dataset.featuredInitialized = "true";
 
-    const activeIndex = originalItems.findIndex(item =>
+    let initialIndex = originals.findIndex(item =>
       item.classList.contains("is-active")
     );
 
-    featured.index = activeIndex >= 0 ? activeIndex : 0;
-    featured.position = total + featured.index;
-    featured.initialized = true;
-  }
+    if (initialIndex < 0) initialIndex = 0;
 
+    // 前後各複製一組卡片，建立無限循環
+    const before = originals.map(item => {
+      const clone = item.cloneNode(true);
 
-  function renderFeaturedDots() {
-    const dotWrap = featured.dots;
+      clone.classList.remove("is-active");
+      clone.removeAttribute("aria-current");
+      clone.dataset.featuredClone = "true";
 
-    if (!dotWrap || !featured.items.length) return;
-
-    dotWrap.innerHTML = "";
-
-    featured.items.forEach((item, index) => {
-      const button = document.createElement("button");
-
-      button.type = "button";
-      button.setAttribute(
-        "aria-label",
-        `切換到第 ${index + 1} 個行程`
-      );
-
-      button.addEventListener("click", () => goToFeatured(index));
-
-      dotWrap.appendChild(button);
-    });
-  }
-
-
-  function updateFeaturedActive() {
-    const { renderedItems } = featured;
-
-    if (!renderedItems.length) return;
-
-    renderedItems.forEach((item, index) => {
-      const isActive = index === featured.position;
-
-      item.classList.toggle("is-active", isActive);
-
-      if (isActive) {
-        item.setAttribute("aria-current", "true");
-      } else {
-        item.removeAttribute("aria-current");
-      }
+      return clone;
     });
 
-    if (featured.dots) {
-      [...featured.dots.children].forEach((dot, index) => {
-        const isActive = index === featured.index;
+    const after = originals.map(item => {
+      const clone = item.cloneNode(true);
 
-        dot.classList.toggle("is-active", isActive);
-        dot.setAttribute(
-          "aria-current",
-          isActive ? "true" : "false"
-        );
-      });
-    }
-  }
+      clone.classList.remove("is-active");
+      clone.removeAttribute("aria-current");
+      clone.dataset.featuredClone = "true";
 
+      return clone;
+    });
 
-  function renderFeatured(animate = true) {
-    const { root, track, renderedItems } = featured;
+    track.replaceChildren(...before, ...originals, ...after);
 
-    if (!root || !track || !renderedItems.length) return;
-
-    const total = featured.items.length;
-    if (!total) return;
-
-    featured.position = Math.max(
-      0,
-      Math.min(featured.position, renderedItems.length - 1)
+    const items = Array.from(
+      track.querySelectorAll(".featured-item")
     );
 
-    featured.index =
-      ((featured.position - total) % total + total) % total;
+    // position 指向目前要置中的卡片
+    let position = total + initialIndex;
+    let moving = false;
+    let fallbackTimer = null;
+    let resizeFrame = 0;
 
-    const activeItem = renderedItems[featured.position];
-    if (!activeItem) return;
+    // 自動輪播設定
+    const autoplayDelay = 5000;
+    let autoplayTimer = null;
+    let isHovering = false;
+    let isTouching = false;
 
-    /*
-     * 先計算中央卡片位置，再更新 is-active。
-     * 卡片縮放、淡入淡出由 CSS 控制。
-     * 保留原本的置中計算，不直接用 JS 設定 scale。
-     */
-    const viewportWidth = root.clientWidth;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
 
-    const itemCenter =
-      activeItem.offsetLeft + activeItem.offsetWidth / 2;
+    const dots = [];
 
-    const offset = viewportWidth / 2 - itemCenter;
+    /* -----------------------------------------
+       取得原始行程索引
+    ----------------------------------------- */
 
-    updateFeaturedActive();
-
-    /* 輪播位移與卡片縮放使用相近的動畫時間 */
-    track.style.transition = animate
-      ? "transform .8s cubic-bezier(.22, .61, .36, 1)"
-      : "none";
-
-    track.style.transform = `translate3d(${offset}px, 0, 0)`;
-
-    featuredPrev?.setAttribute("aria-label", "上一個行程");
-    featuredNext?.setAttribute("aria-label", "下一個行程");
-
-    if (!animate) {
-      track.getBoundingClientRect();
-
-      track.style.transition =
-        "transform .8s cubic-bezier(.22, .61, .36, 1)";
-    }
-  }
-
-
-  function goToFeatured(index) {
-    const total = featured.items.length;
-    if (!total) return;
-
-    const normalizedIndex = ((index % total) + total) % total;
-
-    featured.index = normalizedIndex;
-    featured.position = total + normalizedIndex;
-
-    renderFeatured(true);
-  }
-
-
-  function featuredMove(step) {
-    if (!featured.items.length) return;
-
-    featured.position += step;
-    renderFeatured(true);
-  }
-
-  featuredPrev?.addEventListener("click", () => featuredMove(-1));
-  featuredNext?.addEventListener("click", () => featuredMove(1));
-
-
-  if (featured.track) {
-    featured.track.addEventListener("transitionend", event => {
-      if (
-        event.target !== featured.track ||
-        event.propertyName !== "transform"
-      ) {
-        return;
-      }
-
-      const total = featured.items.length;
-      if (!total) return;
-
-      if (featured.position < total) {
-        featured.position += total;
-        renderFeatured(false);
-      } else if (featured.position >= total * 2) {
-        featured.position -= total;
-        renderFeatured(false);
-      }
-    });
-  }
-
-
-  let featuredStartX = null;
-  let featuredStartY = null;
-
-  featured.root?.addEventListener(
-    "touchstart",
-    event => {
-      if (!event.touches.length) return;
-
-      featuredStartX = event.touches[0].clientX;
-      featuredStartY = event.touches[0].clientY;
-    },
-    { passive: true }
-  );
-
-  featured.root?.addEventListener(
-    "touchend",
-    event => {
-      if (
-        featuredStartX === null ||
-        featuredStartY === null ||
-        !event.changedTouches.length
-      ) {
-        return;
-      }
-
-      const deltaX =
-        event.changedTouches[0].clientX - featuredStartX;
-
-      const deltaY =
-        event.changedTouches[0].clientY - featuredStartY;
-
-      if (
-        Math.abs(deltaX) > 45 &&
-        Math.abs(deltaX) > Math.abs(deltaY) * 1.2
-      ) {
-        featuredMove(deltaX < 0 ? 1 : -1);
-      }
-
-      featuredStartX = null;
-      featuredStartY = null;
-    },
-    { passive: true }
-  );
-
-
-  let featuredRefreshFrame = null;
-
-  function refreshFeaturedPosition() {
-    if (!featured.items.length) return;
-
-    if (featuredRefreshFrame !== null) {
-      cancelAnimationFrame(featuredRefreshFrame);
+    function getLogicalIndex() {
+      return ((position - total) % total + total) % total;
     }
 
-    featuredRefreshFrame = requestAnimationFrame(() => {
-      featuredRefreshFrame = null;
-      renderFeatured(false);
-    });
-  }
+    /* -----------------------------------------
+       建立下方圓點
+    ----------------------------------------- */
 
+    if (dotsBox) {
+      dotsBox.replaceChildren();
 
-  if (featured.items.length) {
-    setupFeaturedInfinite();
-    renderFeaturedDots();
-    refreshFeaturedPosition();
+      originals.forEach((item, index) => {
+        const dot = document.createElement("button");
 
-    window.addEventListener("load", refreshFeaturedPosition);
-    window.addEventListener("resize", refreshFeaturedPosition);
+        dot.type = "button";
+        dot.setAttribute(
+          "aria-label",
+          `前往第 ${index + 1} 個行程`
+        );
 
-    if ("ResizeObserver" in window && featured.root) {
-      let previousWidth = featured.root.clientWidth;
+        dot.addEventListener("click", () => {
+          if (moving || index === getLogicalIndex()) return;
 
-      const featuredResizeObserver = new ResizeObserver(() => {
-        const currentWidth = featured.root.clientWidth;
+          stopAutoplay();
 
-        /*
-         * 只有容器寬度改變才重新定位，
-         * 避免文字區高度變動造成重複觸發。
-         */
-        if (currentWidth !== previousWidth) {
-          previousWidth = currentWidth;
-          refreshFeaturedPosition();
+          moving = true;
+          position = total + index;
+
+          moveToPosition(true);
+          startFallback();
+          startAutoplay();
+        });
+
+        dotsBox.appendChild(dot);
+        dots.push(dot);
+      });
+    }
+
+    /* -----------------------------------------
+       更新作用中卡片與圓點
+    ----------------------------------------- */
+
+    function updateActive() {
+      items.forEach((item, index) => {
+        const active = index === position;
+
+        item.classList.toggle("is-active", active);
+
+        if (active) {
+          item.setAttribute("aria-current", "true");
+        } else {
+          item.removeAttribute("aria-current");
         }
       });
 
-      featuredResizeObserver.observe(featured.root);
-    }
-  }
+      const activeIndex = getLogicalIndex();
 
+      dots.forEach((dot, index) => {
+        const active = index === activeIndex;
 
-  /* =========================================================
-     5. 歐洲／紐澳區域圖片輪播
-  ========================================================= */
-/* =========================================================
-   區域旅程輪播｜完整 JS
-   1. 上一張／下一張
-   2. 自動輪播：每 4 秒切換
-   3. 圓點切換
-   4. 左右滑動
-   5. 滑鼠移入暫停，移出繼續
-   6. 視窗尺寸變更時重新渲染
-========================================================= */
+        dot.classList.toggle("is-active", active);
 
-function setupRegionSlider(id) {
-  const root = document.getElementById(id);
-  if (!root) return null;
-
-  const track = $(".region-track", root);
-  const prev = $(".region-prev", root);
-  const next = $(".region-next", root);
-  const dots = $(".region-dots", root);
-
-  if (!track || root.dataset.regionInitialized === "true") {
-    return null;
-  }
-
-  root.dataset.regionInitialized = "true";
-
-  const slides = $$(".region-slide", track);
-  const total = slides.length;
-
-  if (!total) return null;
-
-  let index = 0;
-  let timer = null;
-  let resizeTimer = null;
-  let touchStartX = null;
-  let touchStartY = null;
-
-  /* ========================================
-     初始位置
-  ======================================== */
-
-  const initialIndex = slides.findIndex(slide =>
-    slide.classList.contains("is-active")
-  );
-
-  index = initialIndex >= 0 ? initialIndex : 0;
-
-  /* ========================================
-     更新輪播畫面
-  ======================================== */
-
-  function updateSlides() {
-    slides.forEach((slide, i) => {
-      slide.classList.remove(
-        "is-active",
-        "is-prev",
-        "is-next"
-      );
-
-      if (i === index) {
-        slide.classList.add("is-active");
-      } else if (i === (index - 1 + total) % total) {
-        slide.classList.add("is-prev");
-      } else if (i === (index + 1) % total) {
-        slide.classList.add("is-next");
-      }
-
-      /* 只有目前顯示的行程呈現文字 */
-      const copy = $(".region-copy", slide);
-
-      if (copy) {
-        copy.style.display = i === index ? "" : "none";
-      }
-    });
-
-    /* 更新下方圓點 */
-    if (dots) {
-      $$("button", dots).forEach((button, i) => {
-        const active = i === index;
-
-        button.classList.toggle("is-active", active);
-        button.classList.toggle("active", active);
-
-        button.setAttribute(
+        dot.setAttribute(
           "aria-current",
           active ? "true" : "false"
         );
       });
     }
-  }
 
-  function render() {
-    updateSlides();
-  }
+    /* -----------------------------------------
+       計算卡片置中位置
+    ----------------------------------------- */
 
-  /* ========================================
-     自動輪播
-     4000 = 每 4 秒切換一次
-  ======================================== */
+    function getOffset(item) {
+      const viewportCenter = root.clientWidth / 2;
+      const itemCenter = item.offsetLeft + item.offsetWidth / 2;
 
-  function restart() {
-    clearInterval(timer);
-    timer = null;
-
-    if (total > 1 && !reducedMotionQuery.matches) {
-      timer = setInterval(() => {
-        move(1);
-      }, 4000);
+      return viewportCenter - itemCenter;
     }
-  }
 
-  /* ========================================
-     切換指定頁面
-  ======================================== */
+    /* -----------------------------------------
+       無動畫重新定位
+       用於初始化、視窗縮放及循環接回
+    ----------------------------------------- */
 
-  function goTo(target) {
-    index = (target + total) % total;
+    function rebaseWithoutAnimation() {
+      const activeItem = items[position];
 
-    render();
-    restart();
-  }
+      if (!activeItem) return;
 
-  /* ========================================
-     上一張／下一張
-  ======================================== */
+      track.style.transition = "none";
 
-  function move(step) {
-    goTo(index + step);
-  }
-
-  /* ========================================
-     建立下方圓點
-  ======================================== */
-
-  function buildDots() {
-    if (!dots) return;
-
-    dots.innerHTML = "";
-
-    slides.forEach((slide, i) => {
-      const button = document.createElement("button");
-
-      button.type = "button";
-
-      button.setAttribute(
-        "aria-label",
-        `切換到第 ${i + 1} 張`
-      );
-
-      button.addEventListener("click", () => {
-        goTo(i);
+      items.forEach(item => {
+        item.style.transition = "none";
       });
 
-      dots.appendChild(button);
-    });
-  }
+      updateActive();
 
-  /* ========================================
-     左右切換按鈕
-  ======================================== */
+      track.style.transform =
+        `translate3d(${getOffset(activeItem)}px, 0, 0)`;
 
-  prev?.addEventListener("click", () => {
-    move(-1);
-  });
+      // 強制瀏覽器完成定位
+      void track.offsetWidth;
 
-  next?.addEventListener("click", () => {
-    move(1);
-  });
+      requestAnimationFrame(() => {
+        items.forEach(item => {
+          item.style.removeProperty("transition");
+        });
 
-  /* ========================================
-     滑鼠移入暫停，移出繼續
-  ======================================== */
+        track.style.removeProperty("transition");
+      });
+    }
 
-  root.addEventListener("mouseenter", () => {
-    clearInterval(timer);
-    timer = null;
-  });
+    /* -----------------------------------------
+       移動至指定卡片
+    ----------------------------------------- */
 
-  root.addEventListener("mouseleave", restart);
+    function moveToPosition(animate = true) {
+      const activeItem = items[position];
 
-  /* ========================================
-     手機觸控開始
-  ======================================== */
+      if (!activeItem) return;
 
-  root.addEventListener(
-    "touchstart",
-    event => {
-      if (!event.touches.length) return;
+      updateActive();
 
-      touchStartX = event.touches[0].clientX;
-      touchStartY = event.touches[0].clientY;
-    },
-    { passive: true }
-  );
+      if (!animate || reducedMotionQuery.matches) {
+        rebaseWithoutAnimation();
+        return;
+      }
 
-  /* ========================================
-     手機左右滑動切換
-  ======================================== */
+      track.style.transition =
+        "transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1)";
 
-  root.addEventListener(
-    "touchend",
-    event => {
+      track.style.transform =
+        `translate3d(${getOffset(activeItem)}px, 0, 0)`;
+    }
+
+    /* -----------------------------------------
+       動畫結束後處理無限循環
+    ----------------------------------------- */
+
+    function finishMove() {
+      if (!moving) return;
+
+      clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+
+      // 移到前方複製區：無動畫接回原始卡片
+      if (position < total) {
+        position += total;
+        rebaseWithoutAnimation();
+      }
+
+      // 移到後方複製區：無動畫接回原始卡片
+      else if (position >= total * 2) {
+        position -= total;
+        rebaseWithoutAnimation();
+      }
+
+      moving = false;
+    }
+
+    /* -----------------------------------------
+       備用完成機制
+       避免 transitionend 未觸發造成輪播卡住
+    ----------------------------------------- */
+
+    function startFallback() {
+      clearTimeout(fallbackTimer);
+
+      fallbackTimer = setTimeout(() => {
+        if (!moving) return;
+
+        // 直接完成定位，並恢復 CSS 動畫
+        rebaseWithoutAnimation();
+
+        moving = false;
+        fallbackTimer = null;
+      }, 850);
+    }
+
+    /* -----------------------------------------
+       上一張／下一張
+    ----------------------------------------- */
+
+    function move(step) {
+      if (moving || total < 2) return;
+
+      moving = true;
+      position += step;
+
+      moveToPosition(true);
+      startFallback();
+    }
+
+    /* -----------------------------------------
+       自動輪播控制
+       每 5 秒切換一次
+    ----------------------------------------- */
+
+    function stopAutoplay() {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+
+    function startAutoplay() {
+      stopAutoplay();
+
       if (
-        touchStartX === null ||
-        touchStartY === null ||
-        !event.changedTouches.length
+        total < 2 ||
+        reducedMotionQuery.matches ||
+        isHovering ||
+        isTouching ||
+        document.hidden
       ) {
         return;
       }
 
-      const dx =
-        event.changedTouches[0].clientX - touchStartX;
+      autoplayTimer = setInterval(() => {
+        if (!moving) {
+          move(1);
+        }
+      }, autoplayDelay);
+    }
 
-      const dy =
-        event.changedTouches[0].clientY - touchStartY;
+    /* -----------------------------------------
+       左右箭頭
+    ----------------------------------------- */
 
-      if (
-        Math.abs(dx) > 45 &&
-        Math.abs(dx) > Math.abs(dy) * 1.2
-      ) {
-        move(dx < 0 ? 1 : -1);
+    prevBtn.addEventListener("click", event => {
+      event.preventDefault();
+      stopAutoplay();
+      move(-1);
+      startAutoplay();
+    });
+
+    nextBtn.addEventListener("click", event => {
+      event.preventDefault();
+      stopAutoplay();
+      move(1);
+      startAutoplay();
+    });
+
+    /* -----------------------------------------
+       軌道位移結束
+    ----------------------------------------- */
+
+    track.addEventListener("transitionend", event => {
+      if (event.target !== track) return;
+      if (event.propertyName !== "transform") return;
+
+      finishMove();
+    });
+
+    /* -----------------------------------------
+       滑鼠移入暫停，移出繼續
+    ----------------------------------------- */
+
+    root.addEventListener("mouseenter", () => {
+      isHovering = true;
+      stopAutoplay();
+    });
+
+    root.addEventListener("mouseleave", () => {
+      isHovering = false;
+      startAutoplay();
+    });
+
+    /* -----------------------------------------
+       手機觸控開始
+    ----------------------------------------- */
+
+    root.addEventListener(
+      "touchstart",
+      event => {
+        if (!event.touches.length) return;
+
+        isTouching = true;
+        stopAutoplay();
+
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+
+        touchEndX = touchStartX;
+        touchEndY = touchStartY;
+      },
+      { passive: true }
+    );
+
+    /* -----------------------------------------
+       手機觸控移動
+    ----------------------------------------- */
+
+    root.addEventListener(
+      "touchmove",
+      event => {
+        if (!event.touches.length) return;
+
+        touchEndX = event.touches[0].clientX;
+        touchEndY = event.touches[0].clientY;
+      },
+      { passive: true }
+    );
+
+    /* -----------------------------------------
+       手機左右滑動
+    ----------------------------------------- */
+
+    root.addEventListener(
+      "touchend",
+      () => {
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        if (
+          Math.abs(diffX) > 45 &&
+          Math.abs(diffX) > Math.abs(diffY) * 1.2
+        ) {
+          move(diffX < 0 ? 1 : -1);
+        }
+
+        isTouching = false;
+        startAutoplay();
+      },
+      { passive: true }
+    );
+
+    root.addEventListener(
+      "touchcancel",
+      () => {
+        isTouching = false;
+        startAutoplay();
+      },
+      { passive: true }
+    );
+
+    /* -----------------------------------------
+       瀏覽器分頁切換
+    ----------------------------------------- */
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
       }
+    });
 
-      touchStartX = null;
-      touchStartY = null;
-    },
-    { passive: true }
-  );
+    /* -----------------------------------------
+       視窗尺寸變更：重新置中
+    ----------------------------------------- */
 
-  /* ========================================
-     視窗尺寸變更
-  ======================================== */
+    window.addEventListener("resize", () => {
+      cancelAnimationFrame(resizeFrame);
 
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
+      resizeFrame = requestAnimationFrame(() => {
+        clearTimeout(fallbackTimer);
+        moving = false;
+        rebaseWithoutAnimation();
+      });
+    });
 
-    resizeTimer = setTimeout(() => {
+    /* -----------------------------------------
+       初始化
+    ----------------------------------------- */
+
+    rebaseWithoutAnimation();
+    startAutoplay();
+
+    return {
+      root,
+      track,
+
+      refresh() {
+        clearTimeout(fallbackTimer);
+        moving = false;
+        rebaseWithoutAnimation();
+      },
+
+      stopAutoplay,
+      startAutoplay
+    };
+  }
+
+  // 精選旅程只初始化一次
+  const featuredSlider = setupFeaturedSlider();
+
+
+  /* =========================================================
+     5. 歐洲／紐澳區域圖片輪播
+     1. 上一張／下一張
+     2. 每 4 秒自動切換
+     3. 圓點切換
+     4. 左右滑動
+     5. 滑鼠移入暫停，移出繼續
+     6. 視窗尺寸變更時重新渲染
+  ========================================================= */
+
+  function setupRegionSlider(id) {
+    const root = document.getElementById(id);
+    if (!root) return null;
+
+    const track = $(".region-track", root);
+    const prev = $(".region-prev", root);
+    const next = $(".region-next", root);
+    const dots = $(".region-dots", root);
+
+    if (!track || root.dataset.regionInitialized === "true") {
+      return null;
+    }
+
+    root.dataset.regionInitialized = "true";
+
+    const slides = $$(".region-slide", track);
+    const total = slides.length;
+
+    if (!total) return null;
+
+    let index = 0;
+    let timer = null;
+    let resizeTimer = null;
+    let touchStartX = null;
+    let touchStartY = null;
+
+    const initialIndex = slides.findIndex(slide =>
+      slide.classList.contains("is-active")
+    );
+
+    index = initialIndex >= 0 ? initialIndex : 0;
+
+    /* 更新輪播畫面 */
+
+    function updateSlides() {
+      slides.forEach((slide, i) => {
+        slide.classList.remove(
+          "is-active",
+          "is-prev",
+          "is-next"
+        );
+
+        if (i === index) {
+          slide.classList.add("is-active");
+        } else if (i === (index - 1 + total) % total) {
+          slide.classList.add("is-prev");
+        } else if (i === (index + 1) % total) {
+          slide.classList.add("is-next");
+        }
+
+        const copy = $(".region-copy", slide);
+
+        if (copy) {
+          copy.style.display = i === index ? "" : "none";
+        }
+      });
+
+      if (dots) {
+        $$("button", dots).forEach((button, i) => {
+          const active = i === index;
+
+          button.classList.toggle("is-active", active);
+          button.classList.toggle("active", active);
+
+          button.setAttribute(
+            "aria-current",
+            active ? "true" : "false"
+          );
+        });
+      }
+    }
+
+    function render() {
+      updateSlides();
+    }
+
+    /* 自動輪播 */
+
+    function restart() {
+      clearInterval(timer);
+      timer = null;
+
+      if (total > 1 && !reducedMotionQuery.matches) {
+        timer = setInterval(() => {
+          move(1);
+        }, 4000);
+      }
+    }
+
+    /* 切換指定頁面 */
+
+    function goTo(target) {
+      index = (target + total) % total;
+
       render();
-    }, 120);
-  });
+      restart();
+    }
 
-  /* ========================================
-     初始化
-  ======================================== */
+    function move(step) {
+      if (total < 2) return;
+      goTo(index + step);
+    }
 
-  buildDots();
-  render();
-  restart();
+    /* 建立下方圓點 */
 
-  return {
-    root,
-    track,
-    render,
-    move
-  };
-}
+    function buildDots() {
+      if (!dots) return;
 
-/* =========================================================
-   啟動輪播
-========================================================= */
+      dots.innerHTML = "";
 
-setupRegionSlider("europeRegion");
-setupRegionSlider("oceaniaRegion");
+      slides.forEach((slide, i) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+
+        button.setAttribute(
+          "aria-label",
+          `切換到第 ${i + 1} 張`
+        );
+
+        button.addEventListener("click", () => {
+          goTo(i);
+        });
+
+        dots.appendChild(button);
+      });
+    }
+
+    /* 左右切換按鈕 */
+
+    prev?.addEventListener("click", () => {
+      move(-1);
+    });
+
+    next?.addEventListener("click", () => {
+      move(1);
+    });
+
+    /* 滑鼠移入暫停，移出繼續 */
+
+    root.addEventListener("mouseenter", () => {
+      clearInterval(timer);
+      timer = null;
+    });
+
+    root.addEventListener("mouseleave", restart);
+
+    /* 手機觸控開始 */
+
+    root.addEventListener(
+      "touchstart",
+      event => {
+        if (!event.touches.length) return;
+
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+      },
+      { passive: true }
+    );
+
+    /* 手機左右滑動切換 */
+
+    root.addEventListener(
+      "touchend",
+      event => {
+        if (
+          touchStartX === null ||
+          touchStartY === null ||
+          !event.changedTouches.length
+        ) {
+          return;
+        }
+
+        const dx =
+          event.changedTouches[0].clientX - touchStartX;
+
+        const dy =
+          event.changedTouches[0].clientY - touchStartY;
+
+        if (
+          Math.abs(dx) > 45 &&
+          Math.abs(dx) > Math.abs(dy) * 1.2
+        ) {
+          move(dx < 0 ? 1 : -1);
+        }
+
+        touchStartX = null;
+        touchStartY = null;
+      },
+      { passive: true }
+    );
+
+    /* 視窗尺寸變更 */
+
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+
+      resizeTimer = setTimeout(() => {
+        render();
+      }, 120);
+    });
+
+    /* 初始化 */
+
+    buildDots();
+    render();
+    restart();
+
+    return {
+      root,
+      track,
+      render,
+      move
+    };
+  }
+
+  setupRegionSlider("europeRegion");
+  setupRegionSlider("oceaniaRegion");
+
 
   /* =========================================================
      6. 經典行程狀態
-     歐洲與紐澳都直接讀取 HTML
   ========================================================= */
 
   const classicState = {
@@ -816,7 +949,6 @@ setupRegionSlider("oceaniaRegion");
 
   /* =========================================================
      9. 取得目前顯示的經典行程卡片
-     歐洲與紐澳統一使用 .classic-card
   ========================================================= */
 
   function getClassicCards(type) {
@@ -835,7 +967,9 @@ setupRegionSlider("oceaniaRegion");
 
   function getClassicDots(type) {
     return document.getElementById(
-      type === "europe" ? "europeClassicDots" : "oceaniaClassicDots"
+      type === "europe"
+        ? "europeClassicDots"
+        : "oceaniaClassicDots"
     );
   }
 
@@ -846,22 +980,40 @@ setupRegionSlider("oceaniaRegion");
 
     if (!wrap || !state) return;
 
-    const maxOffset = Math.max(0, cards.length - cardsVisible());
+    const maxOffset = Math.max(
+      0,
+      cards.length - cardsVisible()
+    );
+
     const dotCount = maxOffset + 1;
 
     wrap.innerHTML = "";
+
     wrap.setAttribute("role", "group");
+
     wrap.setAttribute(
       "aria-label",
-      type === "europe" ? "歐洲經典行程頁面切換" : "紐澳經典行程頁面切換"
+      type === "europe"
+        ? "歐洲經典行程頁面切換"
+        : "紐澳經典行程頁面切換"
     );
 
     for (let index = 0; index < dotCount; index += 1) {
       const button = document.createElement("button");
+
       button.type = "button";
       button.className = "classic-dot";
-      button.setAttribute("aria-label", `切換到第 ${index + 1} 個位置`);
-      button.setAttribute("aria-pressed", String(index === state.offset));
+
+      button.setAttribute(
+        "aria-label",
+        `切換到第 ${index + 1} 個位置`
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        String(index === state.offset)
+      );
+
       button.dataset.classicDot = type;
       button.dataset.offset = String(index);
 
@@ -879,13 +1031,20 @@ setupRegionSlider("oceaniaRegion");
   function updateClassicDots(type) {
     const wrap = getClassicDots(type);
     const state = classicState[type];
+
     if (!wrap || !state) return;
 
     $$(".classic-dot", wrap).forEach((dot, index) => {
       const active = index === state.offset;
+
       dot.classList.toggle("is-active", active);
+
       dot.setAttribute("aria-pressed", String(active));
-      dot.setAttribute("aria-current", active ? "true" : "false");
+
+      dot.setAttribute(
+        "aria-current",
+        active ? "true" : "false"
+      );
     });
   }
 
@@ -904,6 +1063,7 @@ setupRegionSlider("oceaniaRegion");
 
     if (!cards.length) {
       track.style.transform = "translate3d(0, 0, 0)";
+      updateClassicDots(type);
       return;
     }
 
@@ -952,6 +1112,7 @@ setupRegionSlider("oceaniaRegion");
     classicState.europe.offset = 0;
 
     track.style.transform = "translate3d(0, 0, 0)";
+
     renderClassicDots("europe");
     updateClassicPosition("europe");
   }
@@ -989,6 +1150,7 @@ setupRegionSlider("oceaniaRegion");
     classicState.oceania.offset = 0;
 
     track.style.transform = "translate3d(0, 0, 0)";
+
     renderClassicDots("oceania");
     updateClassicPosition("oceania");
   }
@@ -1043,8 +1205,16 @@ setupRegionSlider("oceaniaRegion");
         const category = button.dataset.filter;
 
         const validCategory = type === "europe"
-          ? ["western", "eastern", "southern", "northern"].includes(category)
-          : ["newzealand", "australia"].includes(category);
+          ? [
+              "western",
+              "eastern",
+              "southern",
+              "northern"
+            ].includes(category)
+          : [
+              "newzealand",
+              "australia"
+            ].includes(category);
 
         if (!validCategory) return;
 
@@ -1108,7 +1278,11 @@ setupRegionSlider("oceaniaRegion");
         const active = button.dataset.filter === "western";
 
         button.classList.toggle("is-active", active);
-        button.setAttribute("aria-pressed", String(active));
+
+        button.setAttribute(
+          "aria-pressed",
+          String(active)
+        );
       });
     }
 
@@ -1121,7 +1295,11 @@ setupRegionSlider("oceaniaRegion");
         const active = button.dataset.filter === "newzealand";
 
         button.classList.toggle("is-active", active);
-        button.setAttribute("aria-pressed", String(active));
+
+        button.setAttribute(
+          "aria-pressed",
+          String(active)
+        );
       });
     }
   }
@@ -1167,7 +1345,10 @@ setupRegionSlider("oceaniaRegion");
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
 
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (
+        Math.abs(dx) > 50 &&
+        Math.abs(dx) > Math.abs(dy)
+      ) {
         changeClassic(type, dx < 0 ? 1 : -1);
       }
     });
@@ -1202,13 +1383,17 @@ setupRegionSlider("oceaniaRegion");
     clearTimeout(classicResizeTimer);
 
     classicResizeTimer = setTimeout(() => {
-      renderFeatured(false);
+      // 精選旅程：重新置中，不額外播放縮放動畫
+      featuredSlider?.refresh();
 
+      // 經典行程：重新計算圓點與卡片位置
       renderClassicDots("europe");
       renderClassicDots("oceania");
+
       updateClassicPosition("europe");
       updateClassicPosition("oceania");
 
+      // 展開中的行程內容重新計算高度
       $$(".classic-card.is-open .trip-more, .trip-card.is-open .trip-more")
         .forEach(more => {
           more.style.height = "auto";
@@ -1219,10 +1404,7 @@ setupRegionSlider("oceaniaRegion");
 
   /* =========================================================
      19. 初始化完成
+     精選旅程已在第 4 段初始化，不重複呼叫
   ========================================================= */
-
-  if (featured.items.length) {
-    renderFeatured(false);
-  }
 
 })();
