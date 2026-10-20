@@ -1126,27 +1126,20 @@ header .container {
 ======================================== */
 
 /* 行程卡片 */
-.featured-item {
-  position: relative;
-  flex: 0 0 500px;
-  width: 500px;
-  min-width: 0;
-  opacity: 0.78;
-  transform: scale(0.96);
-  transform-origin: center center;
-  box-sizing: border-box;
-
-  /* 平滑縮放，避免動畫太明顯 */
-  transition:
-    transform 0.8s ease-in-out,
-    opacity 0.8s ease-in-out;
+.featured-track {
+  transition: transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
+  will-change: transform;
 }
 
-/* 目前選中的卡片 */
+.featured-item {
+  transform: scale(0.98);
+  transition:
+    transform 0.8s ease,
+    opacity 0.8s ease;
+}
+
 .featured-item.is-active {
-  z-index: 2;
-  opacity: 1;
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 /* 非作用中卡片隱藏文字 */
@@ -1230,55 +1223,170 @@ header .container {
 }
 
 /* ========================================
-   行程詳細按鈕
+   行程詳細按鈕｜簡約精品風格
+======================================== */
+
+
+/* ========================================
+   精選旅程｜行程介紹按鈕
+   香檳金漸層・方形邊框・滑入不閃爍
 ======================================== */
 
 .featured-detail-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 6px;
+
   min-width: 132px;
   margin-top: 18px;
   padding: 10px 16px;
 
-  border: 1px solid rgba(142, 117, 84, 0.65);
+  /* 邊框 */
+  /* border: 1px solid #a78a5d; */
   border-radius: 0;
 
-  background: transparent;
-  color: var(--gold-dark);
+  /* 香檳金漸層背景 */
+  background: linear-gradient(
+    135deg,
+    #c9b18a 0%,
+    #ad9064 50%,
+    #94764e 100%
+  );
 
-  font-size: 14px;
+  color: #fff;
+
+  /* 文字樣式 */
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: 16px;
+  font-weight: 500;
   letter-spacing: 0.1em;
   line-height: 1.5;
 
   text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+
   cursor: pointer;
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease;
-
   float: right;
+
+  /* 避免滑入時背景切換造成閃爍 */
+  transition: border-color 0.3s ease;
+
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
+
+/* ========================================
+   右側箭頭
+======================================== */
 
 .featured-detail-btn::after {
   content: "→";
+
   display: inline-block;
+  flex-shrink: 0;
+
   font-family: Arial, sans-serif;
-  font-size: 15px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+
+  /* 只移動箭頭，不改變按鈕背景 */
+  transition: transform 0.3s ease;
+}
+
+/* ========================================
+   滑鼠移入效果
+   保持漸層一致，避免背景閃爍
+======================================== */
+
+.featured-detail-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #c9b18a 0%,
+    #ad9064 50%,
+    #94764e 100%
+  );
+
+  border-color: #88683f;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* 箭頭輕微向右移動 */
+.featured-detail-btn:hover::after {
+  transform: translateX(4px);
+}
+
+/* 避免鍵盤操作時的預設樣式影響 */
+.featured-detail-btn:focus-visible {
+  outline: 2px solid #ad9064;
+  outline-offset: 3px;
+}
+
+/* 點擊時不縮放，避免按鈕閃動 */
+.featured-detail-btn:active {
+  background: linear-gradient(
+    135deg,
+    #c9b18a 0%,
+    #ad9064 50%,
+    #94764e 100%
+  );
+
+  color: #fff;
+}
+
+/* ========================================
+   手機版
+======================================== */
+
+@media (max-width: 575px) {
+  .featured-detail-btn {
+    min-width: 126px;
+    margin-top: 14px;
+    padding: 9px 14px;
+
+    font-size: 15px;
+    gap: 12px;
+  }
+
+  .featured-detail-btn::after {
+    font-size: 17px;
+  }
+}
+
+
+/* 右側箭頭 */
+.featured-detail-btn::after {
+  content: "→";
+  display: inline-block;
+
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1;
+
   transition: transform 0.25s ease;
 }
 
+/* 滑入效果 */
 .featured-detail-btn:hover {
-  background: var(--gold-dark);
-  border-color: var(--gold-dark);
+  background: #94764e;
+  border-color: #94764e;
   color: #fff;
 }
 
 .featured-detail-btn:hover::after {
   transform: translateX(4px);
+}
+
+/* 手機版 */
+@media (max-width: 575px) {
+  .featured-detail-btn {
+    min-width: 126px;
+    padding: 9px 14px;
+  }
 }
 
 /* ========================================
@@ -3875,23 +3983,3 @@ header .container {
   }
 }
 
-
-/* =========================================================
-   精選旅程｜切換效果微調
-   搭配 brand-main.js 的 0.8 秒平順切換
-   不覆蓋卡片原有尺寸、位置、縮放及響應式設定
-========================================================= */
-.featured-track {
-  will-change: transform;
-}
-
-/* 尊重使用者的減少動態效果設定 */
-@media (prefers-reduced-motion: reduce) {
-  .featured-track {
-    transition: none !important;
-  }
-
-  .featured-item {
-    transition-duration: 0.01ms !important;
-  }
-}
