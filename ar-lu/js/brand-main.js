@@ -160,10 +160,32 @@
 
 
   /* =========================================================
-     3. Reveal 淡入動畫
+     3. Reveal 淡入動畫｜加速經典行程初次顯示
+     - 歐洲／紐澳經典行程不等待捲動觀察，初始化時直接顯示
+     - 其他區塊保留原本 reveal 效果，但提早預載入視窗
   ========================================================= */
 
   const revealItems = $$(".reveal");
+  const classicTrackSelector = "#europeClassicTrack, #oceaniaClassicTrack";
+
+  // 經典行程本身、行程卡片，或包住經典行程軌道的區塊，立即顯示。
+  // 避免使用者往下滑時，行程區塊仍因 IntersectionObserver 而維持隱藏。
+  const isClassicReveal = el => {
+    if (
+      el.matches(classicTrackSelector) ||
+      el.closest(classicTrackSelector) ||
+      el.closest(".classic-card")
+    ) {
+      return true;
+    }
+
+    return Boolean(el.querySelector(classicTrackSelector));
+  };
+
+  const classicRevealItems = revealItems.filter(isClassicReveal);
+  const otherRevealItems = revealItems.filter(el => !isClassicReveal(el));
+
+  classicRevealItems.forEach(el => el.classList.add("is-visible"));
 
   if ("IntersectionObserver" in window) {
     const revealObserver = new IntersectionObserver(
@@ -175,12 +197,16 @@
           revealObserver.unobserve(entry.target);
         });
       },
-      { threshold: 0.15 }
+      {
+        threshold: 0.01,
+        // 提早 240px 觸發其他區塊，減少捲動到時才突然出現的感覺。
+        rootMargin: "0px 0px 240px 0px"
+      }
     );
 
-    revealItems.forEach(el => revealObserver.observe(el));
+    otherRevealItems.forEach(el => revealObserver.observe(el));
   } else {
-    revealItems.forEach(el => el.classList.add("is-visible"));
+    otherRevealItems.forEach(el => el.classList.add("is-visible"));
   }
 
 
