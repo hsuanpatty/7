@@ -3285,10 +3285,16 @@ header .container {
   overflow: hidden;
 }
 
-.oceania-classic-section {
-  background: #fff;
-}
+/* .oceania-classic-section {
+  background:
+    radial-gradient(ellipse at 8% 12%, rgba(223,201,163,.14), transparent 36%),
+    linear-gradient(135deg, #f8f0e6 0%, #c0b2a4 100%);
+} */
 
+.oceania-classic-section {
+  background:
+radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.55) 38%, transparent 70%), radial-gradient(at 85% 78%, rgba(190, 158, 119, 0.2) 0%, transparent 48%), linear-gradient(135deg, rgb(245, 238, 227) 0%, #c0b2a49a 48%, rgb(243, 233, 218) 100%);
+}
 
 .classic-section .section-inner {
   width: min(1260px, calc(100% - 88px));
