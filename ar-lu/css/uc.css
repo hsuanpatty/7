@@ -3297,7 +3297,7 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
 } */
 
 .oceania-classic-section {
-  background: radial-gradient(ellipse at 8% 12%, rgba(223, 201, 163, .14), transparent 36%), linear-gradient(135deg, #fffefc 30%, #f5f5f5 100%);
+  background: radial-gradient(ellipse at 8% 12%, rgba(223, 201, 163, .14), transparent 36%), linear-gradient(135deg, #fffefc 50%, #f7f7f7 100%);
 
 }
 
@@ -3493,9 +3493,9 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   transform: scale(1.045);
 }
 
+
 /* ========================================
    卡片內文
-   固定高度 300px（包含 padding）
 ======================================== */
 
 .classic-card .classic-body,
@@ -3519,7 +3519,7 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   display: block;
   margin-bottom: 2px;
   color: var(--gold-dark, #a58b66);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: .16em;
   line-height: 1.7;
@@ -3527,7 +3527,6 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
 
 /* ========================================
    行程標題
-   固定三行空間，最多顯示三行
 ======================================== */
 
 .classic-card h3,
@@ -3576,7 +3575,7 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
 ======================================== */
 
 .classic-card .classic-desc {
-  margin: 0 0 15px;
+  margin: 0 ;
   height: 3em;
   flex: 0 0 3em;
   line-height: 1.5em;
@@ -3604,10 +3603,61 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
 }
 
 /* ========================================
-   了解更多按鈕
+   經典行程｜完整行程連結
+   不展開，直接透過整張卡片的 a 連結跳轉
 ======================================== */
 
-.classic-card .trip-toggle,
+.classic-card .trip-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  border: 0;
+  border-top: 1px solid rgba(179, 154, 117, .28);
+  padding: 15px 0;
+  background: transparent;
+  color: var(--gold-dark, #a58b66);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: .12em;
+  line-height: 1.6;
+  text-align: left;
+  text-decoration: none;
+  transition: color .25s ease;
+}
+
+/* 箭頭樣式 */
+.classic-card .trip-toggle .trip-arrow,
+.classic-card .trip-toggle .plus {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform .3s ease;
+}
+
+/* 滑鼠移入：文字變深 */
+.classic-card-link:hover .trip-toggle,
+.classic-card-link:focus-visible .trip-toggle {
+  color: #806849;
+}
+
+/* 滑鼠移入：箭頭向右移動 */
+.classic-card-link:hover .trip-arrow,
+.classic-card-link:hover .plus,
+.classic-card-link:focus-visible .trip-arrow,
+.classic-card-link:focus-visible .plus {
+  transform: translateX(5px);
+}
+
+/* ========================================
+   推薦行程 trip-card
+   保留原本的展開功能
+======================================== */
+
 .trip-card .trip-toggle {
   display: flex;
   align-items: center;
@@ -3616,7 +3666,7 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   width: 100%;
   margin-top: auto;
   border: 0;
-  border-top: 1px solid rgba(179,154,117,.28);
+  border-top: 1px solid rgba(179, 154, 117, .28);
   padding: 13px 0 0;
   background: transparent;
   color: var(--gold-dark, #a58b66);
@@ -3629,12 +3679,10 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   transition: color .25s ease;
 }
 
-.classic-card .trip-toggle:hover,
 .trip-card .trip-toggle:hover {
   color: #806849;
 }
 
-.classic-card .trip-toggle .plus,
 .trip-card .trip-toggle .plus {
   display: inline-block;
   flex: 0 0 auto;
@@ -3643,16 +3691,11 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   transition: transform .3s ease;
 }
 
-.classic-card.is-open .trip-toggle .plus,
 .trip-card.is-open .trip-toggle .plus {
   transform: rotate(45deg);
 }
 
-/* ========================================
-   展開內容
-======================================== */
-
-.classic-card .trip-more,
+/* 推薦行程展開內容：保留原功能 */
 .trip-card .trip-more {
   display: block;
   flex: 0 0 auto;
@@ -3667,21 +3710,16 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   will-change: height;
 }
 
-.classic-card.is-open .trip-more,
 .trip-card.is-open .trip-more {
   opacity: 1;
 }
 
-.classic-card .trip-more-inner,
 .trip-card .trip-more-inner {
   display: flow-root;
   min-height: 0;
   overflow: hidden;
 }
 
-/* 展開文字 */
-
-.classic-card .trip-more p,
 .trip-card .trip-more p {
   margin: 0;
   padding: 5px 0 0;
@@ -3691,17 +3729,6 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   overflow-wrap: anywhere;
 }
 
-/* 歐洲原本的 .classic-more 段落 */
-.classic-card .trip-more .classic-more {
-  margin: 0;
-  padding: 5px 0 0;
-  color: #74685e;
-  font-size: 15px;
-  line-height: 1.95;
-}
-
-
-.classic-card .trip-more ul,
 .trip-card .trip-more ul {
   margin: 0;
   padding: 0 0 18px 17px;
@@ -3710,10 +3737,13 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   line-height: 1.9;
 }
 
-.classic-card .trip-more li,
 .trip-card .trip-more li {
   margin: 0 0 4px;
 }
+
+/* ========================================
+   卡片連結
+======================================== */
 
 .classic-card-link {
   display: block;
@@ -3732,21 +3762,21 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
   padding-bottom: 0;
 }
 
-/* 推薦行程：移除頂部內距，保留底部內距 */
+/* 推薦行程：保留原本內距 */
 .classic-card > .classic-content {
   padding-top: 0;
   padding-bottom: 24px;
 }
+
+/* ========================================
+   平板版
+======================================== */
 
 @media (max-width: 1200px) {
   .classic-heading {
     width: 97%;
   }
 }
-
-/* ========================================
-   平板版
-======================================== */
 
 @media (max-width: 1000px) {
   .classic-section {
@@ -3817,168 +3847,3 @@ radial-gradient(at 18% 18%, rgba(255, 252, 244, 0.96) 0%, rgba(247, 239, 225, 0.
     transform: none;
   }
 }
-
-
-
-/* =========================================================
-   9. 裝飾與頁尾 (Decorations & Footer)
-   ========================================================= */
-.decorate-visual {
-  position: relative;
-  min-height: 350px;
-  overflow: hidden;
-}
-
-.decorate-visual-image {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(35,25,16,.10), rgba(35,25,16,.02)),
-    url("../images/ar-ul/bg-1.jpg") center / cover no-repeat;
-}
-
-.decorate-visual-copy {
-  position: absolute;
-  right: 10%;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #fff;
-  text-shadow: 0 2px 14px rgba(0,0,0,.28);
-  text-align: right;
-}
-
-.decorate-visual-copy span {
-  display: block;
-  font-family: var(--serif);
-  font-size: 10px;
-  letter-spacing: .32em;
-}
-
-.decorate-visual-copy strong {
-  display: block;
-  margin-top: 12px;
-  font-family: var(--serif);
-  font-size: clamp(24px, 3vw, 38px);
-  font-weight: 400;
-  letter-spacing: .10em;
-}
-
-.site-decorate {
-  background: #40372f;
-  color: #eee5dc;
-  text-align: center;
-  padding: 28px 20px;
-  font-family: var(--serif);
-  letter-spacing: .13em;
-  font-size: 11px;
-}
-
-.site-decorate p {
-  margin: 3px 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    transition-duration: .01ms !important;
-  }
-}
-
-
-/* =========================================================
-   歐洲經典行程、紐澳經典行程｜輪播點點
-   對應 HTML：
-   #europeClassicDots
-   #oceaniaClassicDots
-
-   保留原有樣式，只新增點點外觀
-========================================================= */
-
-#europeClassicDots,
-#oceaniaClassicDots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 9px;
-  width: 100%;
-  min-height: 12px;
-  margin: 28px auto 0;
-  position: relative;
-  z-index: 2;
-}
-
-#europeClassicDots .classic-dot,
-#oceaniaClassicDots .classic-dot {
-  display: block;
-  flex: 0 0 7px;
-  width: 7px;
-  height: 7px;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 50%;
-  background: #d8cbb9;
-  opacity: 1;
-  cursor: pointer;
-  transition:
-    width 0.3s ease,
-    flex-basis 0.3s ease,
-    background-color 0.3s ease,
-    border-radius 0.3s ease;
-}
-
-/* 目前所在的行程：金棕色長點 */
-#europeClassicDots .classic-dot.is-active,
-#oceaniaClassicDots .classic-dot.is-active {
-  flex-basis: 24px;
-  width: 24px;
-  height: 7px;
-  border-radius: 10px;
-  background: #9c8366;
-}
-
-/* 滑鼠移入 */
-#europeClassicDots .classic-dot:hover,
-#oceaniaClassicDots .classic-dot:hover {
-  background: #9c8366;
-}
-
-/* 鍵盤操作焦點 */
-#europeClassicDots .classic-dot:focus-visible,
-#oceaniaClassicDots .classic-dot:focus-visible {
-  outline: 2px solid #9c8366;
-  outline-offset: 4px;
-}
-
-/* 平板 */
-@media (max-width: 991px) {
-  #europeClassicDots,
-  #oceaniaClassicDots {
-    margin-top: 24px;
-    gap: 8px;
-  }
-}
-
-/* 手機 */
-@media (max-width: 575px) {
-  #europeClassicDots,
-  #oceaniaClassicDots {
-    margin-top: 20px;
-    gap: 7px;
-  }
-
-  #europeClassicDots .classic-dot,
-  #oceaniaClassicDots .classic-dot {
-    flex-basis: 6px;
-    width: 6px;
-    height: 6px;
-  }
-
-  #europeClassicDots .classic-dot.is-active,
-  #oceaniaClassicDots .classic-dot.is-active {
-    flex-basis: 20px;
-    width: 20px;
-    height: 6px;
-  }
-}
-
