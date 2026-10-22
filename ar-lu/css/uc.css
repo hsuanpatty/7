@@ -1021,7 +1021,7 @@ header .container {
 
 .featured-section {
   position: relative;
-  padding: 95px 0 105px;
+  padding: 95px 0 ;
   overflow: hidden;
 }
 
