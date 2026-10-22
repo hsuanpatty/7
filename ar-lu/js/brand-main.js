@@ -981,8 +981,10 @@
     const track = getClassicTrack(type);
     if (!track) return [];
 
+    // 篩選狀態由 filterEuropeCards / filterOceaniaCards 寫入 inline display，
+    // 直接讀取即可，避免每次點箭頭都逐張觸發 getComputedStyle。
     return $$(".classic-card", track).filter(card =>
-      getComputedStyle(card).display !== "none"
+      card.style.display !== "none"
     );
   }
 
@@ -1129,18 +1131,42 @@
     const track = document.getElementById("europeClassicTrack");
     if (!track) return;
 
-    $$(".classic-card", track).forEach(card => {
-      card.style.display =
-        card.dataset.region === category ? "" : "none";
-    });
+    const cards = $$(".classic-card", track);
+    const state = classicState.europe;
 
-    classicState.europe.category = category;
-    classicState.europe.offset = 0;
+    // 切換分類時先暫停軌道位移動畫，避免舊位置與新分類交疊閃動。
+    const previousTransition = track.style.transition;
+    track.style.transition = "none";
 
+    // 先更新狀態與位置，再一次完成卡片顯示切換。
+    state.category = category;
+    state.offset = 0;
     track.style.transform = "translate3d(0, 0, 0)";
 
+    cards.forEach(card => {
+      const isMatch = card.dataset.region === category;
+      card.style.display = isMatch ? "" : "none";
+
+      if (!isMatch) return;
+
+      // 分類切換時優先載入目前分類的圖片，避免 lazy-load 延遲造成空白閃動。
+      const image = $("img", card);
+      if (image) {
+        image.loading = "eager";
+        image.decoding = "async";
+        if ("fetchPriority" in image) image.fetchPriority = "high";
+      }
+    });
+
+    // 先讓瀏覽器完成篩選後的版面計算，再更新圓點與卡片位置。
+    void track.offsetHeight;
     renderClassicDots("europe");
     updateClassicPosition("europe");
+
+    // 下一個畫面影格恢復原本的 transition，不影響其他輪播效果。
+    requestAnimationFrame(() => {
+      track.style.transition = previousTransition;
+    });
   }
 
 
