@@ -1021,7 +1021,7 @@ header .container {
 
 .featured-section {
   position: relative;
-  padding: 95px 0 ;
+  padding: 35px 0 95px;
   overflow: hidden;
 }
 
@@ -3280,7 +3280,7 @@ header .container {
 .classic-section {
   position: relative;
   width: 100%;
-  padding: 100px 0 120px;
+  padding: 95px 0 ;
   background: radial-gradient(ellipse at 8% 12%, rgba(223, 201, 163, .14), transparent 36%), linear-gradient(135deg, #f8f0e6 0%, #fdf9f2 58%, #ddc9b5 100%);
   overflow: hidden;
 }
